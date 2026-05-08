@@ -93,6 +93,44 @@ We seek collaboration with **established HRV researchers who have published in H
 - Applications in real-time monitoring: sports, critical care, neurocardiology
 - Methodology papers: Information theory meets physiology
 
+
+## Pathology Sequence Library
+
+Unlike classical supervised machine learning approaches, SKA-HRV does not rely primarily on training large black-box models.
+
+Instead, the framework aims to build a **library of physiological entropy-regime sequences** derived directly from real-time ECG dynamics.
+
+The proposed pipeline is:
+
+```
+ECG / HRV signal
+        ↓
+SKA entropy computation
+        ↓
+neutral / bull / bear regimes
+        ↓
+4-bit transition words
+        ↓
+binary information flow
+        ↓
+sequence-pattern mapping
+```
+
+Under this framework, healthy and pathological cardiac states may correspond to distinct binary transition grammars and entropy-regime organizations.
+
+Examples of future mapped conditions may include:
+
+Healthy autonomic regulation
+Stress and fatigue states
+Recovery dynamics
+Arrhythmia-related instability
+Autonomic dysfunction
+Sleep-related physiological transitions
+
+The long-term objective is to create an open and extensible SKA Pathology Sequence Library, where physiological conditions are associated with characteristic entropy-transition structures rather than only statistical HRV metrics.
+
+In this sense, SKA-HRV investigates whether cardiac physiology can be interpreted as a measurable informational language emerging from real-time entropy dynamics.
+
 #### Citation
 
 If you use or extend this project, please cite:  
