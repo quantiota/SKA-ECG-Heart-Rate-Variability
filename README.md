@@ -44,7 +44,7 @@ This repository is part of a broader SKA research program on entropy-driven regi
 The first empirical discovery of a SKA binary information flow was obtained in the quantitative finance repository:
 
 
-[SKA-quantitative-finance]( https://github.com/quantiota/SKA-quantitative-finance)
+[SKA-quantitative-finance](https://github.com/quantiota/SKA-quantitative-finance/tree/main/ska_engine_c/binary_transition_space)
 
 
 In that work, market microstructure is encoded through three entropy regimes:
