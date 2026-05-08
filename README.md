@@ -37,6 +37,33 @@ This project applies the SKA entropy learning framework to heart rate variabilit
 - **Quantifies entropy** even during stable heart rate segments
 - **Reveals subtle physiological transitions** invisible to classical HRV analysis
 
+## Relation to SKA Quantitative Finance
+
+This repository is part of a broader SKA research program on entropy-driven regime transitions in real-time dynamical systems.
+
+The first empirical discovery of a SKA binary information flow was obtained in the quantitative finance repository:
+
+🔗 https://github.com/quantiota/SKA-quantitative-finance
+
+In that work, market microstructure is encoded through three entropy regimes:
+
+```
+neutral = 00
+bull    = 01
+bear    = 10
+```
+and each transition becomes a 4-bit word:
+
+```
+neutral → neutral = 0000
+neutral → bull    = 0001
+neutral → bear    = 0010
+bull → neutral    = 0100
+bear → neutral    = 1000
+```
+The central hypothesis of SKA-HRV is that physiological signals may also express hidden health-related structure through entropy-regime sequences.
+
+In this sense, SKA-HRV investigates whether the heart, like the market, produces a measurable binary information flow — not as a metaphor, but as a real sequence structure derived from entropy learning.
 
 
 ## Collaboration & Citation
