@@ -67,6 +67,7 @@ The central hypothesis of SKA-HRV is that physiological signals may also express
 
 In this sense, SKA-HRV investigates whether the heart, like the market, produces a measurable binary information flow — not as a metaphor, but as a real sequence structure derived from entropy learning.
 
+We hypothesize that the heart may “speak” a hidden informational language reflecting its physiological state and adaptive health. Under this framework, healthy and pathological conditions may correspond not only to changes in classical HRV metrics, but also to differences in entropy-regime grammar, transition diversity, and sequence organization.
 
 ## Collaboration & Citation
 
