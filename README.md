@@ -96,7 +96,14 @@ We seek collaboration with **established HRV researchers who have published in H
 #### Citation
 
 If you use or extend this project, please cite:  
-Bouarfa Mahi. "Structured Knowledge Accumulation: An Autonomous Framework for Layer-Wise Entropy Reduction in Neural Learning." [arXiv:2503.13942](https://arxiv.org/abs/2503.13942)
+
+* Bouarfa Mahi.
+  Structured Knowledge Accumulation: An Autonomous Framework for Layer-Wise Entropy Reduction in Neural Learning
+  [arXiv:2503.13942](https://arxiv.org/abs/2503.13942)
+* Bouarfa Mahi.
+  Structured Knowledge Accumulation: The Principle of Entropic Least Action in Forward-Only Neural Learning
+  [arXiv:2504.03214](https://arxiv.org/abs/2504.03214)
+
 
 **Contact:** Bouarfa Mahi — _especially interested in collaboration with those having access to large HRV datasets or clinical validation environments._
 
