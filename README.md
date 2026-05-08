@@ -69,29 +69,6 @@ In this sense, SKA-HRV investigates whether the heart, like the market, produces
 
 We hypothesize that the heart may “speak” a hidden informational language reflecting its physiological state and adaptive health. Under this framework, healthy and pathological conditions may correspond not only to changes in classical HRV metrics, but also to differences in entropy-regime grammar, transition diversity, and sequence organization.
 
-## Collaboration & Citation
-
-### 👥 **Collaboration Call: HRV + Machine Learning Researchers**
-
-We seek collaboration with **established HRV researchers who have published in HRV analysis and machine learning** to explore SKA's entropy-based regime discovery in physiological time series.
-
-#### What We Bring:
-- **Novel SKA entropy framework:** Proven in market regime detection, now applied to HRV
-- **Real-time, beat-by-beat entropy computation**
-- **Detection of hidden regime cycling** and subtle state transitions
-- **Open-source, reproducible code and methodology**
-
-#### Ideal Collaborator:
-- **Published HRV researchers** with clinical/medical datasets
-- **Machine learning expertise** in time series or physiological signal processing
-- **Interest in information-theoretic approaches** to biosignals
-- **Willing to co-author research papers/validation studies**
-
-#### Example Collaboration Areas:
-- Clinical validation on cardiac datasets (ICU, ambulatory, sleep, etc.)
-- Comparison of SKA vs. traditional HRV metrics (RMSSD, pNN50, SDNN, etc.)
-- Applications in real-time monitoring: sports, critical care, neurocardiology
-- Methodology papers: Information theory meets physiology
 
 
 ## Pathology Sequence Library
@@ -130,6 +107,32 @@ Sleep-related physiological transitions
 The long-term objective is to create an open and extensible SKA Pathology Sequence Library, where physiological conditions are associated with characteristic entropy-transition structures rather than only statistical HRV metrics.
 
 In this sense, SKA-HRV investigates whether cardiac physiology can be interpreted as a measurable informational language emerging from real-time entropy dynamics.
+
+
+## Collaboration & Citation
+
+### 👥 **Collaboration Call: HRV + Machine Learning Researchers**
+
+We seek collaboration with **established HRV researchers who have published in HRV analysis and machine learning** to explore SKA's entropy-based regime discovery in physiological time series.
+
+#### What We Bring:
+- **Novel SKA entropy framework:** Proven in market regime detection, now applied to HRV
+- **Real-time, beat-by-beat entropy computation**
+- **Detection of hidden regime cycling** and subtle state transitions
+- **Open-source, reproducible code and methodology**
+
+#### Ideal Collaborator:
+- **Published HRV researchers** with clinical/medical datasets
+- **Machine learning expertise** in time series or physiological signal processing
+- **Interest in information-theoretic approaches** to biosignals
+- **Willing to co-author research papers/validation studies**
+
+#### Example Collaboration Areas:
+- Clinical validation on cardiac datasets (ICU, ambulatory, sleep, etc.)
+- Comparison of SKA vs. traditional HRV metrics (RMSSD, pNN50, SDNN, etc.)
+- Applications in real-time monitoring: sports, critical care, neurocardiology
+- Methodology papers: Information theory meets physiology
+
 
 #### Citation
 
