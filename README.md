@@ -12,8 +12,8 @@ This project applies the SKA entropy learning framework to the raw ECG waveform,
 ## Status
 
 Early stage. The acquisition stream is in place: [`bitalino-stream/`](bitalino-stream/) reads the
-raw ECG waveform from a BITalino board at 1000 Hz; the SKA real-time learner reads it on the fly,
-sample by sample, and QuestDB stores each sample with the learner's state. Results, figures and the sequence library will be added as runs
+raw ECG waveform from a BITalino board at 1000 Hz and writes it, sample by sample, into QuestDB
+for the SKA real-time learner. Results, figures and the sequence library will be added as runs
 are collected.
 
 The SKA real-time engine is proprietary and is not included in this repository.
@@ -30,8 +30,8 @@ pip install -r requirements.txt
 # test without hardware
 python ska_stream.py --simulate --seconds 5 --dry-run
 
-# live ECG from the board (USB), learned on the fly, stored in QuestDB
-python ska_stream.py --port /dev/ttyUSB0 --learner ska_engine:SKALearner
+# live ECG from the board (USB) into QuestDB
+python ska_stream.py --port /dev/ttyUSB0
 ```
 
 See [`bitalino-stream/README.md`](bitalino-stream/README.md) for setup, safety notes and the table layout.
@@ -119,7 +119,7 @@ The same SKA real-time learner, applied to other streams:
 We seek collaboration with **established HRV researchers who have published in HRV analysis and machine learning** to explore SKA's entropy-based regime discovery in physiological time series.
 
 #### What We Bring:
-- **Novel SKA entropy framework:** Proven in market regime detection and genomic sequences, now applied to HRV
+- **Novel SKA entropy framework:** Proven in market regime detection, now applied to HRV
 - **Real-time, sample-by-sample entropy computation on the raw ECG**
 - **Detection of hidden regime cycling** and subtle state transitions
 - **Open-source acquisition stream and exported data**
