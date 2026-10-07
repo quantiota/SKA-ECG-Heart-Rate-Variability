@@ -5,32 +5,45 @@
 
 **Heart Rate Variability (HRV) Exploration with Structured Knowledge Accumulation (SKA) and Entropy-Based Learning**
 
-This project applies the SKA entropy learning framework to heart rate variability (HRV) time series, aiming to discover new informational regimes and subtle physiological patterns not accessible with classical statistics or supervised machine learning.
+This project applies the SKA entropy learning framework to the raw ECG waveform, streamed in real time, and to the heart rate variability (HRV) it carries — aiming to register informational regimes and subtle physiological patterns not accessible with classical statistics or supervised machine learning.
 
 
 
-## Features
+## Status
 
-- Real-time HRV analysis using entropy-driven SKA learning
-- Extraction of regime transitions and entropy trajectories
-- Visualization tools for HRV time series, entropy, and state transitions
-- Open-source sample code, datasets, and reproducible figures
+Early stage. The acquisition stream is in place: [`bitalino-stream/`](bitalino-stream/) reads the
+raw ECG waveform from a BITalino board at 1000 Hz and writes it, sample by sample, into QuestDB
+for the SKA real-time learner. Results, figures and the sequence library will be added as runs
+are collected.
+
+The SKA real-time engine is proprietary and is not included in this repository.
 
 
 
 ## Quick Start
 
-1. Clone this repo  
-   `git clone https://github.com/quantiota/SKA-Heart-Rate-Variability.git`
-2. Install requirements  
-   `pip install -r requirements.txt`
-3. Run analysis notebook or script (see `notebooks/` or `scripts/`)
+```bash
+git clone https://github.com/quantiota/SKA-ECG-Heart-Rate-Variability.git
+cd SKA-ECG-Heart-Rate-Variability/bitalino-stream
+pip install -r requirements.txt
+
+# test without hardware
+python ska_stream.py --simulate --seconds 5 --dry-run
+
+# live ECG from the board (USB) into QuestDB
+python ska_stream.py --port /dev/ttyUSB0
+```
+
+See [`bitalino-stream/README.md`](bitalino-stream/README.md) for setup, safety notes and the table layout.
 
 
 
-## Example Figures
+## Why the raw waveform
 
-> _Add here a key HRV entropy trajectory or regime plot demonstrating unique SKA insights._
+Classical HRV reduces the ECG to beat-to-beat (RR) intervals. Here the learner reads the **raw
+waveform at 1000 Hz**: the sample index is a constant 1 ms clock, every beat is read in full
+(P wave, QRS complex, T wave), and the rhythm appears in the spacing between beats rather than
+being extracted beforehand.
 
 
 
@@ -83,7 +96,7 @@ Instead, the framework aims to build a **library of physiological entropy-regime
 The proposed pipeline is:
 
 ```
-ECG / HRV signal
+raw ECG waveform (1000 Hz)
         ↓
 SKA entropy computation
         ↓
@@ -120,9 +133,9 @@ We seek collaboration with **established HRV researchers who have published in H
 
 #### What We Bring:
 - **Novel SKA entropy framework:** Proven in market regime detection, now applied to HRV
-- **Real-time, beat-by-beat entropy computation**
+- **Real-time, sample-by-sample entropy computation on the raw ECG**
 - **Detection of hidden regime cycling** and subtle state transitions
-- **Open-source, reproducible code and methodology**
+- **Open-source acquisition stream and exported data**
 
 #### Ideal Collaborator:
 - **Published HRV researchers** with clinical/medical datasets

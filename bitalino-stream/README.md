@@ -1,119 +1,83 @@
+# BITalino ECG stream
 
-# BITalino Integration for SKA-HRV
+**Real-time raw ECG from a BITalino (r)evolution board, streamed sample by sample into
+QuestDB for the SKA real-time learner.**
 
-**Real-Time ECG Entropy Learning with Structured Knowledge Accumulation (SKA)**
+The stream is the input side only: acquisition, scaling and ingestion. No filtering, no
+beat detection and no learning happen here.
 
-This module connects the **BITalino (r)evolution Board Kit** via USB for real-time ECG signal acquisition, directly applying the **SKA entropy learning framework** to uncover hidden physiological regimes in raw heart signals.
+## Requirements
 
-
-
-##  Requirements
-
-- BITalino (r)evolution Board Kit (BLE/BT with USB cable)
+- BITalino (r)evolution Board Kit, connected by **USB** (preferred — Bluetooth can drop packets)
 - Python ≥ 3.8
-- `pybitalino` library (`pip install pybitalino`)
-- SKA HRV processing modules (from this repo)
-- [Optional] QuestDB + Grafana setup for visualization
+- QuestDB with ILP enabled on port 9009
+- `pip install -r requirements.txt` (`bitalino`, `numpy`)
 
+Serial port: Linux `/dev/ttyUSB0`, macOS `/dev/tty.*`, Windows `COM3` (check Device Manager).
 
+## Safety
 
-##  Connection Setup
+BITalino is a research kit, **not a medical device**. When the electrodes are on the body,
+run the computer **on battery, unplugged from the mains**. Nothing in this repository is
+intended for diagnosis.
 
-> For stable real-time processing, **USB** is preferred over BLE (Bluetooth), which may drop packets.
-
-- **Linux**: `/dev/ttyUSB0`
-- **Windows**: `COM3` or similar (check Device Manager)
-
-
-
-##  Quick Start
+## Quick start
 
 ```bash
-git clone https://github.com/quantiota/SKA-Heart-Rate-Variability.git
-cd SKA-Heart-Rate-Variability/bitalino
+git clone https://github.com/quantiota/SKA-ECG-Heart-Rate-Variability.git
+cd SKA-ECG-Heart-Rate-Variability/bitalino-stream
 pip install -r requirements.txt
-python ska_stream.py
-````
 
-This script will:
+# test without hardware: synthetic ECG, rows printed to the console
+python ska_stream.py --simulate --seconds 5 --dry-run
 
-* Stream ECG in real-time from BITalino
-* Compute entropy via the SKA learning engine
-* Log entropy transitions to QuestDB
-* \[Optional] Update Grafana dashboard
-
-
-
-##  Output
-
-* Raw ECG signal logs (CSV or QuestDB stream)
-* Real-time SKA entropy scores
-* Regime labels (neutral, stress, recovery, etc.)
-* Timestamped event logs for visualization and analysis
-
----
-
-##  Technical Specifications
-
-| Feature           | Value                                 |
-| ----------------- | ------------------------------------- |
-| Sampling Rate     | 1000 Hz (recommended for HRV)         |
-| ADC Resolution    | 10-bit                                |
-| Channels Used     | A1 (ECG), optional A2 (EDA), A3 (EMG) |
-| Data Format       | Raw voltage per timestamp             |
-| Signal Processing | None (SKA learns from raw waveform)   |
-
-
-
-##  Why BITalino for SKA-HRV?
-
-> Traditional HRV methods simplify ECG into RR intervals, discarding most of the physiological signal. SKA takes a radically different approach:
-
-### Classical HRV:
-
-* Reduces signal to beat-to-beat intervals
-* Ignores waveform shape and transient dynamics
-* Uses fixed-window statistical summaries
-
-### SKA Entropy Learning:
-
-* Learns from **raw, full-resolution ECG**
-* Captures **nonlinear information flow**
-* Detects **entropy transitions** in real-time
-* Supports **multi-modal learning** (ECG + EDA)
-
-
-
-##  Data Flow Diagram
-
-```text
-BITalino USB
-     ↓
-Raw ECG Signal
-     ↓
-SKA Entropy Processor (Python)
-     ↓
-Entropy Score + Regime State
-     ↓
-QuestDB (Time Series Storage)
-     ↓
-Grafana (Live Visualization)
+# live: ECG on channel A1 → QuestDB table ecg_stream
+python ska_stream.py --port /dev/ttyUSB0
 ```
 
+Options: `--channel` (0 = A1), `--seconds` (0 = until Ctrl-C), `--host`, `--ilp-port`,
+`--table`, `--dry-run`, `--simulate`.
 
+## What is written
 
-##  Integration Goals
+One row per sample in the table `ecg_stream`:
 
-This module is part of the broader SKA-HRV initiative, aiming to redefine the analysis and interpretation of physiological time series using entropy-first, forward-only learning. By integrating real-time data acquisition, unsupervised regime detection, and dynamic entropy tracking, SKA-HRV opens new frontiers for understanding the hidden structure of autonomic regulation.
+| column | meaning |
+|---|---|
+| `sample_index` | 0, 1, 2, … — the internal clock (1 sample = 1 ms) |
+| `adc` | raw 10-bit value, 0–1023 |
+| `level` | `adc / 1023`, the input level in [0, 1] |
+| `seq` | BITalino sequence number (0–15), used to count dropped packets |
+| `timestamp` | start time + `sample_index` × 1 ms (constant step) |
+| `source` | `bitalino` or `simulate` |
 
+The learner reads the stream on the sample index. Wall-clock time is kept only as a
+constant 1 ms step.
 
+## Technical specifications
 
+| Feature | Value |
+|---|---|
+| Sampling rate | 1000 Hz |
+| ADC resolution | 10-bit |
+| Channel | A1 (ECG) |
+| Data | raw value per sample, no processing |
+| Ingestion | QuestDB ILP, TCP 9009 |
 
+## Data flow
 
+```text
+BITalino (USB, 1000 Hz)
+     ↓
+ska_stream.py  — raw ADC → level in [0, 1], one row per sample
+     ↓
+QuestDB  (table ecg_stream, ILP 9009)
+     ↓
+SKA real-time learner
+     ↓
+Grafana (live visualization)
+```
 
+## Documentation
 
-
-
-
-
-
+Manufacturer documents in [`docs/`](docs/): quick-start guide, user manual and board-kit datasheet.
