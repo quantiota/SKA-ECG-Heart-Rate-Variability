@@ -12,8 +12,8 @@ This project applies the SKA entropy learning framework to the raw ECG waveform,
 ## Status
 
 Early stage. The acquisition stream is in place: [`bitalino-stream/`](bitalino-stream/) reads the
-raw ECG waveform from a BITalino board at 1000 Hz and writes it, sample by sample, into QuestDB
-for the SKA real-time learner. Results, figures and the sequence library will be added as runs
+raw ECG waveform from a BITalino board at 1000 Hz; the SKA real-time learner reads it on the fly,
+sample by sample, and QuestDB stores each sample with the learner's state. Results, figures and the sequence library will be added as runs
 are collected.
 
 The SKA real-time engine is proprietary and is not included in this repository.
@@ -30,8 +30,8 @@ pip install -r requirements.txt
 # test without hardware
 python ska_stream.py --simulate --seconds 5 --dry-run
 
-# live ECG from the board (USB) into QuestDB
-python ska_stream.py --port /dev/ttyUSB0
+# live ECG from the board (USB), learned on the fly, stored in QuestDB
+python ska_stream.py --port /dev/ttyUSB0 --learner ska_engine:SKALearner
 ```
 
 See [`bitalino-stream/README.md`](bitalino-stream/README.md) for setup, safety notes and the table layout.
@@ -149,7 +149,7 @@ If you use or extend this project, please cite:
   [arXiv:2504.03214](https://arxiv.org/abs/2504.03214)
 
 
-**Contact:** Bouarfa Mahi — _especially interested in collaboration with those having access to large HRV datasets and clinical validation environments._
+**Contact:** Bouarfa Mahi — _especially interested in collaboration with those having access to large HRV datasets or clinical validation environments._
 
 
 

@@ -1,10 +1,10 @@
 # BITalino ECG stream
 
-**Real-time raw ECG from a BITalino (r)evolution board, streamed sample by sample into
-QuestDB for the SKA real-time learner.**
+**Real-time raw ECG from a BITalino (r)evolution board, learned on the fly by the SKA
+real-time learner, with every sample and the learner's state stored in QuestDB.**
 
-The stream is the input side only: acquisition, scaling and ingestion. No filtering, no
-beat detection and no learning happen here.
+The learner reads each sample the moment it arrives. QuestDB only stores; it is not in the
+learning path. No filtering and no beat detection happen anywhere.
 
 ## Requirements
 
@@ -31,12 +31,27 @@ pip install -r requirements.txt
 # test without hardware: synthetic ECG, rows printed to the console
 python ska_stream.py --simulate --seconds 5 --dry-run
 
-# live: ECG on channel A1 → QuestDB table ecg_stream
+# live: ECG on channel A1, learned on the fly, stored in QuestDB table ecg_stream
+python ska_stream.py --port /dev/ttyUSB0 --learner ska_engine:SKALearner
+
+# raw stream only (no learner)
 python ska_stream.py --port /dev/ttyUSB0
 ```
 
-Options: `--channel` (0 = A1), `--seconds` (0 = until Ctrl-C), `--host`, `--ilp-port`,
-`--table`, `--dry-run`, `--simulate`.
+Options: `--learner` (module:Class), `--channel` (0 = A1), `--seconds` (0 = until Ctrl-C),
+`--host`, `--ilp-port`, `--table`, `--dry-run`, `--simulate`.
+
+## The learner
+
+The SKA real-time engine is proprietary and not included. It plugs in with
+`--learner module:Class`; the class must provide
+
+```python
+def step(self, level: float) -> dict[str, float]: ...
+```
+
+called once per sample, in order, with the input level in [0, 1]. The fields it returns
+(for example `knowledge`, `entropy`, `P`) are written to the same row as the sample.
 
 ## What is written
 
@@ -48,6 +63,7 @@ One row per sample in the table `ecg_stream`:
 | `adc` | raw 10-bit value, 0–1023 |
 | `level` | `adc / 1023`, the input level in [0, 1] |
 | `seq` | BITalino sequence number (0–15), used to count dropped packets |
+| learner fields | whatever `step()` returns — e.g. `knowledge`, `entropy`, `P` |
 | `timestamp` | start time + `sample_index` × 1 ms (constant step) |
 | `source` | `bitalino` or `simulate` |
 
@@ -69,11 +85,11 @@ constant 1 ms step.
 ```text
 BITalino (USB, 1000 Hz)
      ↓
-ska_stream.py  — raw ADC → level in [0, 1], one row per sample
+ska_stream.py ── raw ADC → level in [0, 1]
      ↓
-QuestDB  (table ecg_stream, ILP 9009)
+SKA real-time learner  (in process, sample by sample)
      ↓
-SKA real-time learner
+QuestDB  (table ecg_stream, ILP 9009 — raw sample + learner state, one row per sample)
      ↓
 Grafana (live visualization)
 ```
