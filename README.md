@@ -53,37 +53,15 @@ being extracted beforehand.
 - **Quantifies entropy** even during stable heart rate segments
 - **Reveals subtle physiological transitions** invisible to classical HRV analysis
 
-## Relation to SKA Quantitative Finance
+## Hypothesis
 
-This repository is part of a broader SKA research program on entropy-driven regime transitions in real-time dynamical systems.
+Physiological signals may express hidden health-related structure through entropy-regime
+sequences. SKA-HRV investigates whether the heart produces a measurable binary information
+flow — not as a metaphor, but as a real sequence structure derived from entropy learning.
 
-The first empirical discovery of a SKA binary information flow was obtained in the quantitative finance repository:
-
-
-[SKA-quantitative-finance](https://github.com/quantiota/SKA-quantitative-finance/tree/main/ska_engine_c/binary_transition_space)
-
-
-In that work, market microstructure is encoded through three entropy regimes:
-
-```
-neutral = 00
-bull    = 01
-bear    = 10
-```
-and each transition becomes a 4-bit word:
-
-```
-neutral → neutral = 0000
-neutral → bull    = 0001
-neutral → bear    = 0010
-bull → neutral    = 0100
-bear → neutral    = 1000
-```
-The central hypothesis of SKA-HRV is that physiological signals may also express hidden health-related structure through entropy-regime sequences.
-
-In this sense, SKA-HRV investigates whether the heart, like the market, produces a measurable binary information flow — not as a metaphor, but as a real sequence structure derived from entropy learning.
-
-We hypothesize that the heart may “speak” a hidden informational language reflecting its physiological state and adaptive health. Under this framework, healthy and pathological conditions may correspond not only to changes in classical HRV metrics, but also to differences in entropy-regime grammar, transition diversity, and sequence organization.
+Healthy and pathological conditions may then correspond not only to changes in classical HRV
+metrics, but also to differences in entropy-regime grammar, transition diversity, and sequence
+organization.
 
 
 
@@ -125,6 +103,15 @@ The long-term objective is to create an open and extensible SKA Pathology Sequen
 In this sense, SKA-HRV investigates whether cardiac physiology can be interpreted as a measurable informational language emerging from real-time entropy dynamics.
 
 
+## Related SKA repositories
+
+The same SKA real-time learner, applied to other streams:
+
+- [SKA-Genomics](https://github.com/quantiota/SKA-Genomics) — the E. coli K-12 MG1655 chromosome streamed in replication order: 16 transition bands, 64 trinucleotide sub-bands and the genome's path in the 3D probability space.
+- [SKA-quantitative-finance](https://github.com/quantiota/SKA-quantitative-finance) — tick-by-tick market data: probability bands, the 4-bit binary transition space and the sequence library.
+
+
+
 ## Collaboration & Citation
 
 ### 👥 **Collaboration Call: HRV + Machine Learning Researchers**
@@ -132,7 +119,7 @@ In this sense, SKA-HRV investigates whether cardiac physiology can be interprete
 We seek collaboration with **established HRV researchers who have published in HRV analysis and machine learning** to explore SKA's entropy-based regime discovery in physiological time series.
 
 #### What We Bring:
-- **Novel SKA entropy framework:** Proven in market regime detection, now applied to HRV
+- **Novel SKA entropy framework:** Proven in market regime detection and genomic sequences, now applied to HRV
 - **Real-time, sample-by-sample entropy computation on the raw ECG**
 - **Detection of hidden regime cycling** and subtle state transitions
 - **Open-source acquisition stream and exported data**
