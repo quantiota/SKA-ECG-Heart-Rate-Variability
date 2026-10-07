@@ -119,7 +119,7 @@ The same SKA real-time learner, applied to other streams:
 We seek collaboration with **established HRV researchers who have published in HRV analysis and machine learning** to explore SKA's entropy-based regime discovery in physiological time series.
 
 #### What We Bring:
-- **Novel SKA entropy framework:** Proven in market regime detection, now applied to HRV
+- **Novel SKA entropy framework:** Proven in market regime detection and genomic sequences,, now applied to HRV
 - **Real-time, sample-by-sample entropy computation on the raw ECG**
 - **Detection of hidden regime cycling** and subtle state transitions
 - **Open-source acquisition stream and exported data**
