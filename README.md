@@ -11,10 +11,17 @@ This project applies the SKA entropy learning framework to the raw ECG waveform,
 
 ## Status
 
-Early stage. The acquisition stream is in place: [`bitalino-stream/`](bitalino-stream/) reads the
-raw ECG waveform from a BITalino board at 1000 Hz and writes it, sample by sample, into QuestDB
-for the SKA real-time learner. Results, figures and the sequence library will be added as runs
-are collected.
+Early stage. The work runs in two steps:
+
+1. **Public data first.** The [Autonomic Aging](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/)
+   database on PhysioNet — resting ECG at 1000 Hz from 1,121 healthy subjects aged 18 to 92 —
+   will be replayed as a stream into QuestDB and learned. Heart rate variability is known to
+   decline with age, which gives the first readout a reference to be checked against.
+2. **Then the device.** [`bitalino-stream/`](bitalino-stream/) reads the raw ECG waveform from
+   a BITalino board at the same 1000 Hz and writes it, sample by sample, into the same table,
+   so moving from step 1 to step 2 changes only the source.
+
+Results, figures and the sequence library will be added as runs are collected.
 
 The SKA real-time engine is proprietary and is not included in this repository.
 
@@ -78,7 +85,7 @@ raw ECG waveform (1000 Hz)
         ↓
 SKA entropy computation
         ↓
-neutral / bull / bear regimes
+neutral / rising / falling regimes
         ↓
 4-bit transition words
         ↓
@@ -87,16 +94,21 @@ binary information flow
 sequence-pattern mapping
 ```
 
+A regime is the direction of change from one sample to the next — rising, falling or
+neutral. Two consecutive regimes form one of 3 × 3 = 9 transitions; nine values need four
+bits, so each transition is written as a 4-bit word, and the stream of words is the binary
+information flow.
+
 Under this framework, healthy and pathological cardiac states may correspond to distinct binary transition grammars and entropy-regime organizations.
 
 Examples of future mapped conditions may include:
 
-Healthy autonomic regulation
-Stress and fatigue states
-Recovery dynamics
-Arrhythmia-related instability
-Autonomic dysfunction
-Sleep-related physiological transitions
+- Healthy autonomic regulation
+- Stress and fatigue states
+- Recovery dynamics
+- Arrhythmia-related instability
+- Autonomic dysfunction
+- Sleep-related physiological transitions
 
 The long-term objective is to create an open and extensible SKA Pathology Sequence Library, where physiological conditions are associated with characteristic entropy-transition structures rather than only statistical HRV metrics.
 
@@ -119,10 +131,10 @@ The same SKA real-time learner, applied to other streams:
 We seek collaboration with **established HRV researchers who have published in HRV analysis and machine learning** to explore SKA's entropy-based regime discovery in physiological time series.
 
 #### What We Bring:
-- **Novel SKA entropy framework:** Proven in market regime detection and genomic sequences,, now applied to HRV
-- **Real-time, sample-by-sample entropy computation on the raw ECG**
+- **Novel SKA entropy framework:** Proven in market regime detection and genomic sequences, now applied to HRV
+- **Entropy learning on the raw ECG stream**, read in order, one sample at a time
 - **Detection of hidden regime cycling** and subtle state transitions
-- **Open-source acquisition stream and exported data**
+- **Open-source acquisition stream**
 
 #### Ideal Collaborator:
 - **Published HRV researchers** with clinical/medical datasets
@@ -159,4 +171,4 @@ MIT
 
 
 
-*SKA-HRV-Analysis bridges the gap between modern information theory and physiological data science*
+*SKA-HRV bridges the gap between modern information theory and physiological data science*

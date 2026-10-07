@@ -35,8 +35,8 @@ python ska_stream.py --simulate --seconds 5 --dry-run
 python ska_stream.py --port /dev/ttyUSB0
 ```
 
-Options: `--channel` (0 = A1), `--seconds` (0 = until Ctrl-C), `--host`, `--ilp-port`,
-`--table`, `--dry-run`, `--simulate`.
+Options: `--channel` (0 = A1), `--seconds` (0 = until Ctrl-C), `--block` (samples per read),
+`--run` (tag for this acquisition), `--host`, `--ilp-port`, `--table`, `--dry-run`, `--simulate`.
 
 ## What is written
 
@@ -44,6 +44,7 @@ One row per sample in the table `ecg_stream`:
 
 | column | meaning |
 |---|---|
+| `run` | tag identifying the acquisition — default its UTC start time, e.g. `20261007T121500` |
 | `sample_index` | 0, 1, 2, … — the internal clock (1 sample = 1 ms) |
 | `adc` | raw 10-bit value, 0–1023 |
 | `level` | `adc / 1023`, the input level in [0, 1] |
@@ -51,8 +52,19 @@ One row per sample in the table `ecg_stream`:
 | `timestamp` | start time + `sample_index` × 1 ms (constant step) |
 | `source` | `bitalino` or `simulate` |
 
-The learner reads the stream on the sample index. Wall-clock time is kept only as a
-constant 1 ms step.
+The learner reads the stream on the sample index, one `run` at a time. Wall-clock time is
+kept only as a constant 1 ms step.
+
+The clock survives dropped packets. Samples lost in transmission are detected from the
+sequence number and skipped in `sample_index`, so the samples after a loss keep their true
+position and RR intervals are not shortened. Losses of up to 15 consecutive samples are
+counted exactly (15 shows up as a repeated sequence number); the 4-bit sequence number cannot
+tell larger losses apart, so they are counted modulo 16 — another reason to prefer USB over
+Bluetooth.
+
+The simulator (`--simulate`) produces a synthetic ECG with real beat-to-beat variability —
+respiratory sinus arrhythmia plus beat noise, SDNN ≈ 30 ms over 5 minutes — so an HRV
+pipeline can be tested end to end without the board.
 
 ## Technical specifications
 
