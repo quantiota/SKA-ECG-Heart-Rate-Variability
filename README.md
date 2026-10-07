@@ -149,7 +149,7 @@ If you use or extend this project, please cite:
   [arXiv:2504.03214](https://arxiv.org/abs/2504.03214)
 
 
-**Contact:** Bouarfa Mahi — _especially interested in collaboration with those having access to large HRV datasets or clinical validation environments._
+**Contact:** Bouarfa Mahi — _especially interested in collaboration with those having access to large HRV datasets and clinical validation environments._
 
 
 
