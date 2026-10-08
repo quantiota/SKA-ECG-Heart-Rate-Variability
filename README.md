@@ -80,7 +80,24 @@ Healthy and pathological conditions may then correspond not only to changes in c
 metrics, but also to differences in entropy-regime grammar, transition diversity, and sequence
 organization.
 
+## Following Wheeler
 
+> *"No elementary phenomenon is a phenomenon until it is a registered (observed) phenomenon."*
+> — John Archibald Wheeler
+
+The probability bands are not properties of the ECG waiting to be found: they are
+**registered by the interaction** between the ordered stream of heart waves and the SKA
+real-time learner. The evidence is in the results themselves — the bands are not in the
+input values, and their order is not the input order; they are not in a histogram, which
+discards the order of the waves; they form only after the learning phase, as the learner's
+uncertainty falls; and they live in the learner's own space (z, ż, P).
+
+This is why the project speaks of structure being *registered*, not *hidden* or *discovered*:
+the information is produced by the interaction, as it is for the market and the genome.
+
+*Reference: J. A. Wheeler, "Information, physics, quantum: the search for links," in
+W. H. Zurek (ed.), Complexity, Entropy and the Physics of Information (Addison-Wesley,
+1990).*
 
 ## Pathology Sequence Library
 
