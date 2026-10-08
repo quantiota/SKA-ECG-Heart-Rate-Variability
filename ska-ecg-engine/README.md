@@ -1,5 +1,12 @@
 # SKA learning on the ECG event stream — results
 
+[<img src="../ecg_thumbnail.png" width="1280" height="720"
+/>](https://youtu.be/gYEbg5lCm6o)
+
+*Record 0060, PhysioNet Autonomic Aging: a healthy woman aged 18–19, raw ECG at 1000 Hz, 700 beats. Each wave of the heartbeat (P, Q, R, S, T) becomes a phasor on a circle whose circumference is the beat's duration. The learner reads one number per wave, the cosine of the phasor's step from the previous wave. Without labels or rules about cardiology, it organises the five transitions of the heartbeat (P→Q, Q→R, R→S, S→T, T→P) into five separate, stable bands in its own space (z, ż, P), where z is knowledge, ż its flow and P the transition probability.
+
+A normal heart has five transitions. An abnormal one should add new bands.*
+
 **What the SKA learner does with the five waves of the heartbeat: nine runs on one person,
 three inputs × three scales.**
 
