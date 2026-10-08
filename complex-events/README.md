@@ -271,17 +271,17 @@ The search was short, so this is not proof that nothing exists; it is the part t
 checked before any claim of novelty.
 
 Sources: 
-[McSharry et al. 2003 (abstract, PDF)](https://www.lse.ac.uk/CATS/Assets/PDFs/Publications/Papers/2003/53-DynamicModelGenECG-2003-Mchsharry-etal.pdf) ·
-[ECGSYN on PhysioNet](https://physionet.org/content/ecgsyn/) ·
-[ECGSYN model equations](https://www.physionet.org/content/ecgsyn/1.0.0/paper/node4.html) ·
-[ECGSYN MATLAB code](https://physionet.org/files/ecgsyn/1.0.0/Matlab/ecgsyn.m) ·
-[Fourier-series arrhythmia classification, CinC 2020](https://www.cinc.org/2020/Program/accepted/431.html) ·
+- [McSharry et al. 2003 (abstract, PDF)](https://www.lse.ac.uk/CATS/Assets/PDFs/Publications/Papers/2003/53-DynamicModelGenECG-2003-Mchsharry-etal.pdf) ·
+- [ECGSYN on PhysioNet](https://physionet.org/content/ecgsyn/) ·
+- [ECGSYN model equations](https://www.physionet.org/content/ecgsyn/1.0.0/paper/node4.html) ·
+- [ECGSYN MATLAB code](https://physionet.org/files/ecgsyn/1.0.0/Matlab/ecgsyn.m) ·
+- [Fourier-series arrhythmia classification, CinC 2020](https://www.cinc.org/2020/Program/accepted/431.html) ·
 Sayadi, Shamsollahi & Clifford (2010), *Robust detection of premature ventricular
 contractions using a wave-based Bayesian framework*, IEEE Trans. Biomed. Eng. 57(2) —
-[PDF](https://lcp.mit.edu/pdf/sayadiTBME2009.pdf) ·
+- [PDF](https://lcp.mit.edu/pdf/sayadiTBME2009.pdf) ·
 Bauer, Kantelhardt et al. (2006), *Phase-rectified signal averaging detects
 quasi-periodicities in non-stationary data*, Physica A 364:423–434 —
-[record](https://ideas.repec.org/a/eee/phsmap/v364y2006icp423-434.html)
+- [record](https://ideas.repec.org/a/eee/phsmap/v364y2006icp423-434.html)
 
 ## Reproduce
 
