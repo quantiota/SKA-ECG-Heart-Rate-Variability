@@ -11,7 +11,7 @@ This project applies the SKA entropy learning framework to the raw ECG waveform,
 
 ![The heartbeat in the learner's space](ska_ecg_0060_cube.gif)
 
-*The five transitions of the heartbeat in the SKA learner's space (z, ż, P), record 0060 (PhysioNet Autonomic Aging, 700 beats, input Re ċ, scale 25). Each transition keeps a constant probability across the phase space: while knowledge z grows eighteenfold and its flow ż changes, P stays fixed (drift ≤ 0.007). The five flat sheets — S→T 0.95, Q→R 0.52, T→P 0.44, P→Q 0.14, R→S 0.02 — are the invariant signature of a healthy beat, registered by the learner.* [Download](genomic_transition_probability_vr.html) and open on your desktop.
+*The five transitions of the heartbeat in the SKA learner's space (z, ż, P), record 0060 (PhysioNet Autonomic Aging, 700 beats, input Re ċ, scale 25). Each transition keeps a constant probability across the phase space: while knowledge z grows eighteenfold and its flow ż changes, P stays fixed (drift ≤ 0.007). The five flat sheets — S→T 0.95, Q→R 0.52, T→P 0.44, P→Q 0.14, R→S 0.02 — are the invariant signature of a healthy beat, registered by the learner.* [Download](ecg_transition_probability_vr.html) and open on your desktop.
 
 
 
