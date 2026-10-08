@@ -95,9 +95,8 @@ uncertainty falls; and they live in the learner's own space (z, ż, P).
 This is why the project speaks of structure being *registered*, not *hidden* or *discovered*:
 the information is produced by the interaction, as it is for the market and the genome.
 
-*Reference: J. A. Wheeler, "Information, physics, quantum: the search for links," in
-W. H. Zurek (ed.), Complexity, Entropy and the Physics of Information (Addison-Wesley,
-1990).*
+*Reference: John Archibald Wheeler, "Information, Physics, Quantum: the Search for Links",
+Proc. 3rd Int. Symp. Foundations of Quantum Mechanics, Tokyo, 1989, pp. 354–368.*
 
 ## Pathology Sequence Library
 
