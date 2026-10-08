@@ -134,6 +134,11 @@ $$
   learning phase), so the scale uses no future data, as in real time. It gives 25.1 for
   0060 and 24.9 for 0155; most women need 33–70, the oldest up to 237.
 
+
+  The ECG and the phasors stay raw, in mV; only the scale of the sigmoid changes. The
+  amplitude of the waves is a characteristic of the person, so each heart is read with its
+  own scale.
+
 ![The five transition bands across 30 women](results/bands_30_women.png)
 
 *Mean P of each transition for every woman, sorted by age. Left: fixed scale 25. Right:
