@@ -270,7 +270,8 @@ per event on a circle of radius RR/2π, or that feeds its derivative to a real-t
 The search was short, so this is not proof that nothing exists; it is the part to be
 checked before any claim of novelty.
 
-Sources: [McSharry et al. 2003 (abstract, PDF)](https://www.lse.ac.uk/CATS/Assets/PDFs/Publications/Papers/2003/53-DynamicModelGenECG-2003-Mchsharry-etal.pdf) ·
+Sources: 
+[McSharry et al. 2003 (abstract, PDF)](https://www.lse.ac.uk/CATS/Assets/PDFs/Publications/Papers/2003/53-DynamicModelGenECG-2003-Mchsharry-etal.pdf) ·
 [ECGSYN on PhysioNet](https://physionet.org/content/ecgsyn/) ·
 [ECGSYN model equations](https://www.physionet.org/content/ecgsyn/1.0.0/paper/node4.html) ·
 [ECGSYN MATLAB code](https://physionet.org/files/ecgsyn/1.0.0/Matlab/ecgsyn.m) ·
