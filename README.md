@@ -98,6 +98,7 @@ the information is produced by the interaction, as it is for the market and the 
 *Reference: John Archibald Wheeler, "Information, Physics, Quantum: the Search for Links",
 Proc. 3rd Int. Symp. Foundations of Quantum Mechanics, Tokyo, 1989, pp. 354–368.*
 
+
 ## Pathology Sequence Library
 
 Unlike classical supervised machine learning approaches, SKA-HRV does not rely primarily on training large black-box models.
@@ -109,21 +110,26 @@ The proposed pipeline is:
 ```
 raw ECG waveform (1000 Hz)
         ↓
-SKA entropy computation
+five waves per beat → phasors c → return ċ
         ↓
-neutral / rising / falling regimes
+SKA entropy learning (one step per wave)
         ↓
-4-bit transition words
+transitions between waves (5 × 5 = 25 possible)
+        ↓
+5-bit transition words
         ↓
 binary information flow
         ↓
 sequence-pattern mapping
 ```
 
-A regime is the direction of change from one sample to the next — rising, falling or
-neutral. Two consecutive regimes form one of 3 × 3 = 9 transitions; nine values need four
-bits, so each transition is written as a 4-bit word, and the stream of words is the binary
-information flow.
+Each beat has five waves, P → Q → R → S → T, and each wave is one step of the learner
+(see [`complex-events/`](complex-events/)). The states are the five waves, so two
+consecutive waves form one of 5 × 5 = 25 transitions; 25 values need five bits, so each
+transition is written as a 5-bit word, and the stream of words is the binary information
+flow. A normal beat uses only five of them — P→Q, Q→R, R→S, S→T, T→P — repeating as a
+fixed cycle. The other twenty are the transitions a normal heart never makes: T→Q when P is
+missing (atrial fibrillation), T→R for a premature ventricular beat, P→P for a blocked beat.
 
 Under this framework, healthy and pathological cardiac states may correspond to distinct binary transition grammars and entropy-regime organizations.
 
