@@ -70,13 +70,11 @@ being extracted beforehand.
 
 - **Unsupervised regime change detection** in HRV
 - **Quantifies entropy** even during stable heart rate segments
-- **Reveals subtle physiological transitions** invisible to classical HRV analysis
+- **Registers subtle physiological transitions** that classical HRV analysis does not
 
 ## Hypothesis
 
-Physiological signals may express hidden health-related structure through entropy-regime
-sequences. SKA-HRV investigates whether the heart produces a measurable binary information
-flow — not as a metaphor, but as a real sequence structure derived from entropy learning.
+Physiological signals may carry health-related structure that is registered only through their interaction with an entropy learner, as entropy-regime sequences.
 
 Healthy and pathological conditions may then correspond not only to changes in classical HRV
 metrics, but also to differences in entropy-regime grammar, transition diversity, and sequence
@@ -145,7 +143,7 @@ We seek collaboration with **established HRV researchers who have published in H
 #### What We Bring:
 - **Novel SKA entropy framework:** Proven in market regime detection and genomic sequences, now applied to HRV
 - **Entropy learning on the raw ECG stream**, read in order, one sample at a time
-- **Detection of hidden regime cycling** and subtle state transitions
+- **Registration of regime cycling and subtle state transitions not seen by classical reading**
 - **Open-source acquisition stream**
 
 #### Ideal Collaborator:
