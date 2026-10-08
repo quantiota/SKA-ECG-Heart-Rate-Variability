@@ -9,6 +9,10 @@ This project applies the SKA entropy learning framework to the raw ECG waveform,
 
 
 
+[<img src="ecg_thumbnail.png" width="1280" height="720"
+/>](https://youtu.be/gYEbg5lCm6o)
+
+
 ## Status
 
 Early stage. The work runs in two steps:
