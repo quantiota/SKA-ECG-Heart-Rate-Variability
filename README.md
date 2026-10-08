@@ -12,6 +12,8 @@ This project applies the SKA entropy learning framework to the raw ECG waveform,
 [<img src="ecg_thumbnail.png" width="1280" height="720"
 />](https://youtu.be/gYEbg5lCm6o)
 
+*The heartbeat in the learner's space: 700 beats of one healthy heart, read wave by wave by the SKA real-time learner, settle into five bands, one for each transition P→Q→R→S→T. A normal heart has five transitions; an abnormal one should add new bands.*
+
 
 ## Status
 
