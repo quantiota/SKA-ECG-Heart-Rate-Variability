@@ -168,9 +168,9 @@ with everything else identical:
 
 For each run, record:
 
-1. **The probability bands** that emerge in the learner's own 3D space (z, ż, P) — its knowledge z, the knowledge flow ż and
-   the transition probability P — — how
-   many, and whether they match the five transitions.
+1. **The probability bands** that emerge in the learner's own 3D space (z, ż, P) — its
+   knowledge z, the knowledge flow ż and the transition probability P — how many, and
+   whether they match the five transitions.
 2. **Band stability** — distances between bands after the learning phase.
 3. **The path** of the learner through the bands, beat after beat.
 

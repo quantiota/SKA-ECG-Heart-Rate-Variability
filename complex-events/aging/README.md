@@ -30,6 +30,9 @@ $$
 x_n = \frac{1}{1 + e^{-5\,\mathrm{Re}\,\dot c_n}}
 $$
 
+where h_j is the **mean height** of the wave over its arc (not its peak), θ_j the centre of
+the arc and φ_j its width, both as angles.
+
 One x_n per wave, five per beat, in order P, Q, R, S, T. For this person x_n runs from 0.059
 to 0.952. The sections below build each line step by step.
 
@@ -72,7 +75,7 @@ $$
 \theta_j = \frac{\text{centre of the arc}}{r}, \qquad \varphi_j = \frac{\text{width of the arc}}{r}
 $$
 
-For a wave of height h_j over its arc, the sum works out to
+With h_j the **mean height** of the wave over its arc, the sum works out to
 
 $$
 \boxed{\;c_j = h_j \cdot 2\sin\!\left(\frac{\varphi_j}{2}\right) \cdot e^{\,i\theta_j}\;}
@@ -81,21 +84,25 @@ $$
 | part of c | equals | meaning |
 |---|---|---|
 | angle of c | θ_j (+ π if the wave points down) | **where** the wave is in the beat |
-| length of c | \|h_j\| · 2 sin(φ_j / 2) | **height × chord of the arc** |
+| length of c | \|h_j\| · 2 sin(φ_j / 2) | **mean height × chord of the arc** |
 
 For a narrow arc (Q, R, S), 2 sin(φ_j/2) ≈ φ_j, so c_j ≈ h_j φ_j e^{iθ_j}: only the
-**product** of height and width appears. A tall narrow wave and a short wide wave with the
+**product** of mean height and width appears. A tall narrow wave and a short wide wave with the
 same product give the same c. The width is still measured separately (column `arc`).
 
 ### The five phasors of this person
 
-| wave | height (mV) | arc (ms) | Re c (mV) | Im c (mV) |
+| wave | peak height (mV) | arc (ms) | Re c (mV) | Im c (mV) |
 |---|---|---|---|---|
 | P | +0.16 | 70 | +0.038 ± 0.007 | −0.001 ± 0.002 |
 | Q | −0.26 | 28 | −0.020 ± 0.005 | −0.018 ± 0.004 |
 | R | +1.68 | 41 | +0.168 ± 0.019 | +0.247 ± 0.026 |
 | S | −0.11 | 15 | −0.003 ± 0.007 | −0.002 ± 0.042 |
 | T | +0.38 | 244 | −0.274 ± 0.053 | +0.087 ± 0.044 |
+
+The mean height h_j in the formula is about half the peak (0.45 to 0.58 of it for this
+person). For R: peak 1.68 mV, mean height 0.97 mV, arc 41 ms = 0.31 rad, so
+\|c_R\| ≈ 0.97 × 0.31 = 0.30 mV, as measured.
 
 ![Phasors in the complex plane](figures/0060/fig4_c_complex_plane.png)
 
@@ -197,8 +204,8 @@ raw signal, gives false beats when the baseline drifts.
 |---|---|
 | `make_aging_figures.py` | figures 2, 4–8 for one record, read from `ecg_steps` |
 | `detect_beats.py` | beat detection on a cleaned copy |
-| `complex_events_0060.csv` | one row per wave: peak, arc, height, RR, c, ċ, transition |
-| `summary_all.csv` | detection and separation check on the 30 selected women |
+| `complex_events_0060.csv` | one row per wave: peak, arc, peak height, RR, c, ċ, transition |
+| `summary_all.csv` | for each of the 30 selected women: beats, RR, separation of the transitions, corr(\|C\|, RR), and the range of the learner input x (`x_min`, `x_max`, `x_rails_pct` = % of x below 0.01 or above 0.99) |
 | `figures/0060/` | the figures above |
 
 The phasor construction itself is `../ska_complex_events.py`, used unchanged.
@@ -208,5 +215,6 @@ stream collected into `ecg_steps` (see its README), and the packages in
 `../requirements.txt`.
 
 ```bash
-python make_aging_figures.py 0060
+python make_aging_figures.py 0060     # figures and CSV for one person
+python make_aging_figures.py --all    # summary_all.csv only, no figures
 ```

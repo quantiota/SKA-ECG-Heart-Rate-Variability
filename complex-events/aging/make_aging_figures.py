@@ -44,6 +44,9 @@ def head(fig, t, sub):
     fig.text(0.04, 0.915, sub, color=MUTE, fontsize=9.5)
 
 
+SCALE = 5.0   # sigmoid scale of the learner input, in 1/mV (ecg-ska-engine default)
+
+
 def load_from_db(rid):
     """The record's samples as collected in QuestDB (ecg_steps), in mV, in order."""
     import psycopg2
@@ -69,8 +72,16 @@ def main(rid, quiet=False):
     e = d.dropna(subset=["cdot_cos"])
     src = f"Autonomic Aging {rid} ({sex}, {band}), ECG1, 15 min, from ecg_steps"
     out = HERE / "figures" / rid
-    out.mkdir(parents=True, exist_ok=True)
-    d.to_csv(HERE / f"complex_events_{rid}.csv", index=False)
+    if not quiet:                                  # --all: summary only, no figures or CSV
+        out.mkdir(parents=True, exist_ok=True)
+        d.to_csv(HERE / f"complex_events_{rid}.csv", index=False)
+
+    def save(fig, path, **kw):
+        if not quiet:
+            fig.savefig(path, **kw)
+
+    # the learner input: x = sigmoid(SCALE * Re c-dot), as in the engine (scale 5, in mV)
+    x_in = 1.0 / (1.0 + np.exp(-SCALE * e.cdot_cos.values))
 
     # fig2: detection on the raw ECG, first 3 beats
     fig, ax = plt.subplots(figsize=(15, 5), facecolor=BG); style(ax)
@@ -90,7 +101,7 @@ def main(rid, quiet=False):
     head(fig, "Event detection on the raw ECG — peaks and base arcs",
          f"Shaded = base arc of each event, against the per-beat baseline (dotted). {src}, "
          f"first 3 beats.")
-    fig.tight_layout(rect=(0, 0, 1, 0.9)); fig.savefig(out / "fig2_detection_real.png", dpi=150,
+    fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig2_detection_real.png", dpi=150,
                                                       facecolor=BG); plt.close()
 
     # fig4: z per event in the complex plane
@@ -107,7 +118,7 @@ def main(rid, quiet=False):
     ax.legend(frameon=False, ncol=5, loc="lower right", bbox_to_anchor=(1, 1.0), labelcolor=INK)
     head(fig, "Each event is a cluster in the complex plane",
          f"c_j for {d.k.nunique():,} beats × 5 events. {src}.")
-    fig.tight_layout(rect=(0, 0, 1, 0.9)); fig.savefig(out / "fig4_c_complex_plane.png", dpi=150,
+    fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig4_c_complex_plane.png", dpi=150,
                                                       facecolor=BG); plt.close()
 
     # fig5: cosine and sine of z along the event index
@@ -123,7 +134,7 @@ def main(rid, quiet=False):
     a2.set_xlabel("event index n = 5k + j", color=MUTE)
     head(fig, "The beat repeats the same five levels along the event index",
          f"Cosine and sine of c_j, colour = event. {src}, {len(d):,} events.")
-    fig.tight_layout(rect=(0, 0, 1, 0.9)); fig.savefig(out / "fig5_c_event_index.png", dpi=150,
+    fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig5_c_event_index.png", dpi=150,
                                                       facecolor=BG); plt.close()
 
     # fig6: cosine and sine of c-dot along the event index
@@ -139,7 +150,7 @@ def main(rid, quiet=False):
     a2.set_xlabel("event index n = 5k + j", color=MUTE)
     head(fig, "Candidate learner inputs: cosine and sine of ċ along the event index",
          f"ċ_n = c_n − c_(n−1), colour = transition. {src}, {len(e):,} transitions.")
-    fig.tight_layout(rect=(0, 0, 1, 0.9)); fig.savefig(out / "fig6_cdot_event_index.png", dpi=150,
+    fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig6_cdot_event_index.png", dpi=150,
                                                       facecolor=BG); plt.close()
 
     # fig7: levels per input, and the plane
@@ -182,7 +193,7 @@ def main(rid, quiet=False):
                 f"(Mahalanobis, {best[1]} vs {best[2]})", loc="left", color=INK, fontsize=11)
     head(fig, "Which input separates the five transitions?",
          f"Each dot = one transition ċ_n. {src}, {d.k.nunique():,} beats.")
-    fig.tight_layout(rect=(0, 0, 1, 0.9)); fig.savefig(out / "fig7_cdot_levels.png", dpi=150,
+    fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig7_cdot_levels.png", dpi=150,
                                                       facecolor=BG); plt.close()
 
     # fig8: |Z| and RR per beat — two panels, one axis each
@@ -197,13 +208,15 @@ def main(rid, quiet=False):
     a2.set_xlabel("cycle index k", color=MUTE)
     head(fig, f"|C_k| follows the rhythm — corr(|C|, RR) = {rho:+.2f}",
          f"{rho_r:+.2f} with the 1/r prefactor removed (|C|·r). {src}.")
-    fig.tight_layout(rect=(0, 0, 1, 0.9)); fig.savefig(out / "fig8_absC_RR.png", dpi=150,
+    fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig8_absC_RR.png", dpi=150,
                                                       facecolor=BG); plt.close()
 
     summary_row = dict(record=rid, age=band, beats=d.k.nunique(), RR=float(Ck.RR.median()),
                        cos_overlaps=len(summary["cdot_cos"]), sin_overlaps=len(summary["cdot_sin"]),
                        maha=float(best[0]), maha_pair=f"{best[1]} / {best[2]}",
-                       rho=float(rho), rho_r=float(rho_r))
+                       rho=float(rho), rho_r=float(rho_r),
+                       x_min=float(x_in.min()), x_max=float(x_in.max()),
+                       x_rails_pct=float(100 * np.mean((x_in < 0.01) | (x_in > 0.99))))
     if quiet:
         return summary_row
     # the tables
@@ -224,6 +237,8 @@ def main(rid, quiet=False):
               f"{', '.join(f'{p}/{q} ({dprime(col, p, q):.2f})' for p, q in summary[col]) or 'none'}")
     print(f"smallest 2D Mahalanobis {best[0]:.1f} ({best[1]} vs {best[2]})")
     print(f"corr(|C|, RR) {rho:+.2f}   with 1/r removed {rho_r:+.2f}")
+    print(f"input x = sigmoid({SCALE:g} Re ċ): {x_in.min():.3f}..{x_in.max():.3f}, "
+          f"{summary_row['x_rails_pct']:.1f}% at the rails (< 0.01 or > 0.99)")
     print(f"figures -> {out}")
     return summary_row
 
@@ -239,7 +254,8 @@ if __name__ == "__main__":
             print(f"  {r['record']}  {r['age']:6s} {r['beats']:5d} beats  RR {r['RR']:5.0f} ms  "
                   f"overlaps cos {r['cos_overlaps']} sin {r['sin_overlaps']}  "
                   f"Mahalanobis {r['maha']:5.1f} ({r['maha_pair']})  "
-                  f"corr(|C|,RR) {r['rho']:+.2f} / {r['rho_r']:+.2f}", flush=True)
+                  f"corr(|C|,RR) {r['rho']:+.2f} / {r['rho_r']:+.2f}  "
+                  f"x {r['x_min']:.3f}..{r['x_max']:.3f} rails {r['x_rails_pct']:.1f}%", flush=True)
         import csv
         with open(HERE / "summary_all.csv", "w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
