@@ -1,0 +1,16 @@
+# Autonomic Aging records — fetched with ./fetch_data.sh, not committed (~250 MB)
+data/
+
+# Runtime output
+logs/
+*.log
+*.out
+
+# QuestDB console exports
+questdb-query-*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/

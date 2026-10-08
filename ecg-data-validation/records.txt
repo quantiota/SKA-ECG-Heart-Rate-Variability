@@ -1,0 +1,36 @@
+# Autonomic Aging records streamed by ecg_stream_validator.py
+# Device 0 (Task Force Monitor), women, 2 per age band, longest recordings first
+# ID   age band
+# Excluded: 0186 (40-44) and 0365 (55-59) — lead ECG1 is mains interference, 50 Hz carries
+# 98% and 99% of the signal power and no beat is visible. Replaced by the next
+# women in the same band on the same recorder, longest first: 0314 and 0420.
+0060   18-19
+0465   18-19
+1112   20-24
+0002   20-24
+0155   25-29
+0515   25-29
+0612   30-34
+0275   30-34
+0897   35-39
+0248   35-39
+0164   40-44
+0314   40-44
+0114   45-49
+0395   45-49
+0401   50-54
+0936   50-54
+0082   55-59
+0420   55-59
+0053   60-64
+0942   60-64
+0413   65-69
+0214   65-69
+0229   70-74
+0237   70-74
+0153   75-79
+0276   75-79
+0312   80-84
+0249   80-84
+0188   85-92
+0323   85-92
