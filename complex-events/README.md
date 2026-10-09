@@ -10,7 +10,15 @@ This folder documents the construction, shows it on a synthetic beat and on one 
 that decides which stream the learner reads. The step-by-step version for this person, with
 the learner input written out, is in [`aging/README.md`](aging/README.md).
 
----
+![One beat = one turn of a circle](figures/ska_ecg_0060_circle_realtime.gif)
+
+*Record 0060 (PhysioNet Autonomic Aging, woman 18–19), 200 beats in real time — each beat is
+shown for its own RR. Every beat is one turn of a circle whose circumference is its duration,
+RR = 2πr, so arc length is time: the five waves P, Q, R, S, T sit on their measured base arcs
+(onset → offset), at angles θ = t / r from the P peak (filled = positive wave, ring = negative).
+The curvature κ = 1/r = ω = 2π / RR (right) changes from beat to beat with the breath: the
+waves keep their time, while the circle they are read on tightens and loosens.*
+
 
 ## 1. Five events per beat
 

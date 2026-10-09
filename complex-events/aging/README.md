@@ -7,6 +7,10 @@ lead ECG1, the first 15 minutes, 1000 Hz. The signal is read from the collected 
 (`ecg_steps`, built by `ecg-data-validation/`): 900,000 samples, **1,085 beats**, median
 beat duration RR = 822 ms.
 
+
+
+
+
 ## The input in three lines
 
 **1. The phasor of wave j in beat k**, with x(t) the ECG minus its baseline and t in ms from
