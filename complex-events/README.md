@@ -16,7 +16,7 @@ the learner input written out, is in [`aging/README.md`](aging/README.md).
 shown for its own RR. Every beat is one turn of a circle whose circumference is its duration,
 RR = 2πr, so arc length is time: the five waves P, Q, R, S, T sit on their measured base arcs
 (onset → offset), at angles θ = t / r from the P peak (filled = positive wave, ring = negative).
-The curvature κ = 1/r = ω = 2π / RR (right) changes from beat to beat with the breath: the
+The curvature κ = 1/r = ω = 2π / RR (right) changes from beat to beat: the
 waves keep their time, while the circle they are read on tightens and loosens.*
 
 
@@ -55,8 +55,8 @@ The circumference of the circle is the period of the beat:
 **RR = 2πr  →  r = RR / 2π**
 
 Arc length is time (1 ms of arc = 1 ms of signal), and an event at time t after the P peak
-sits at the angle **θ = t / r**. RR is not stable — it changes beat to beat with breathing
-and the autonomic nervous system — so **r changes with every beat**. Each beat has its own
+sits at the angle **θ = t / r**. RR is not stable — it changes from beat to beat — so
+**r changes with every beat**. Each beat has its own
 circle.
 
 ![Base arcs on the circle](figures/fig3_event_arcs_circle.png)
@@ -108,9 +108,9 @@ The derivative is taken on the event index, not on time:
 
 **ċ_n = c_n − c_{n−1}**
 
-Each value of ċ is one **transition** between successive events. In a normal heart only
-five transitions exist — P→Q, Q→R, R→S, S→T, T→P — out of the 25 possible. The two
-candidate learner inputs are
+Each value of ċ is one **transition** between successive events. With the order
+P → Q → R → S → T, the stream uses five transitions — P→Q, Q→R, R→S, S→T, T→P — out of
+the 25 possible. The two candidate learner inputs are
 
 - **cosine stream:** Re ċ_n
 - **sine stream:** Im ċ_n
@@ -140,7 +140,7 @@ to be adapted first.
 
 ## 7. A note on rhythm
 
-The beat-level number \|C_k\| and the rhythm, beat by beat. The mechanism expected from the
+Figure 8 shows the beat-level number \|C_k\| next to the rhythm, beat by beat. The mechanism expected from the
 construction: R and S point in opposite directions, and their angular gap Δt / r shrinks when
 RR is long, so they cancel more.
 
@@ -203,18 +203,14 @@ per event on a circle of radius RR/2π, or that feeds its derivative to a real-t
 The search was short, so this is not proof that nothing exists; it is the part to be
 checked before any claim of novelty.
 
-Sources: 
-- [McSharry et al. 2003 (abstract, PDF)](https://www.lse.ac.uk/CATS/Assets/PDFs/Publications/Papers/2003/53-DynamicModelGenECG-2003-Mchsharry-etal.pdf) ·
-- [ECGSYN on PhysioNet](https://physionet.org/content/ecgsyn/) ·
-- [ECGSYN model equations](https://www.physionet.org/content/ecgsyn/1.0.0/paper/node4.html) ·
-- [ECGSYN MATLAB code](https://physionet.org/files/ecgsyn/1.0.0/Matlab/ecgsyn.m) ·
-- [Fourier-series arrhythmia classification, CinC 2020](https://www.cinc.org/2020/Program/accepted/431.html) ·
-Sayadi, Shamsollahi & Clifford (2010), *Robust detection of premature ventricular
-contractions using a wave-based Bayesian framework*, IEEE Trans. Biomed. Eng. 57(2) —
-- [PDF](https://lcp.mit.edu/pdf/sayadiTBME2009.pdf) ·
-Bauer, Kantelhardt et al. (2006), *Phase-rectified signal averaging detects
-quasi-periodicities in non-stationary data*, Physica A 364:423–434 —
-- [record](https://ideas.repec.org/a/eee/phsmap/v364y2006icp423-434.html)
+Sources:
+- [McSharry et al. 2003 (abstract, PDF)](https://www.lse.ac.uk/CATS/Assets/PDFs/Publications/Papers/2003/53-DynamicModelGenECG-2003-Mchsharry-etal.pdf)
+- [ECGSYN on PhysioNet](https://physionet.org/content/ecgsyn/)
+- [ECGSYN model equations](https://www.physionet.org/content/ecgsyn/1.0.0/paper/node4.html)
+- [ECGSYN MATLAB code](https://physionet.org/files/ecgsyn/1.0.0/Matlab/ecgsyn.m)
+- [Fourier-series arrhythmia classification, CinC 2020](https://www.cinc.org/2020/Program/accepted/431.html)
+- Sayadi, Shamsollahi & Clifford (2010), *Robust detection of premature ventricular contractions using a wave-based Bayesian framework*, IEEE Trans. Biomed. Eng. 57(2) — [PDF](https://lcp.mit.edu/pdf/sayadiTBME2009.pdf)
+- Bauer, Kantelhardt et al. (2006), *Phase-rectified signal averaging detects quasi-periodicities in non-stationary data*, Physica A 364:423–434 — [record](https://ideas.repec.org/a/eee/phsmap/v364y2006icp423-434.html)
 
 ## Reproduce
 
@@ -265,3 +261,7 @@ Both write one row per event:
   marked absent (`present` = False) and gives c = 0: in this record, one S wave (beat 702).
 - Next data: the BITalino stream (1000 Hz, `bitalino-stream/`), then a pathological
   recording.
+
+- **Window edges:** a peak found on the first or last sample of its window is a window
+  edge, not a turning point. In record 1053, 28 % of the Q peaks sit on the −60 ms edge,
+  which splits P→Q into two sub-bands along ż.
