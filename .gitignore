@@ -1,0 +1,18 @@
+# Public ECG datasets — downloaded locally, never committed (PhysioNet, tens of MB to GB)
+data/
+
+# SKA real-time engine work — proprietary, never committed
+ecg-ska-engine/
+
+# Runtime output
+logs/
+*.log
+
+# QuestDB console exports
+questdb-query-*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
