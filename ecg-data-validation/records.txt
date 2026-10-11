@@ -4,13 +4,18 @@
 # Excluded: 0186 (40-44) and 0365 (55-59) — lead ECG1 is mains interference, 50 Hz carries
 # 98% and 99% of the signal power and no beat is visible. Replaced by the next
 # women in the same band on the same recorder, longest first: 0314 and 0420.
+# Excluded: 0612 (30-34), 0249 (80-84) and 0323 (85-92) — 50 Hz ripple of 0.34, 0.50 and
+# 0.33 mV, as large as the P, Q and S waves; it cuts the arcs of the broad waves and fakes or
+# hides the small ones. Rule: 50 Hz amplitude (48-52 Hz band) below 0.1 mV. Replaced by the
+# next women in the same band on the same recorder, longest first, that meet it: 1053, 0889
+# (0351 was next in 80-84 but has 0.16 mV) and 0912.
 0060   18-19
 0465   18-19
 1112   20-24
 0002   20-24
 0155   25-29
 0515   25-29
-0612   30-34
+1053   30-34
 0275   30-34
 0897   35-39
 0248   35-39
@@ -31,6 +36,6 @@
 0153   75-79
 0276   75-79
 0312   80-84
-0249   80-84
+0889   80-84
 0188   85-92
-0323   85-92
+0912   85-92

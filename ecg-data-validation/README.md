@@ -166,16 +166,24 @@ with no gaps and no duplicates.
 | 18–19 | 0060, 0465 | | 55–59 | 0082, 0420 |
 | 20–24 | 1112, 0002 | | 60–64 | 0053, 0942 |
 | 25–29 | 0155, 0515 | | 65–69 | 0413, 0214 |
-| 30–34 | 0612, 0275 | | 70–74 | 0229, 0237 |
+| 30–34 | 1053, 0275 | | 70–74 | 0229, 0237 |
 | 35–39 | 0897, 0248 | | 75–79 | 0153, 0276 |
-| 40–44 | 0164, 0314 | | 80–84 | 0312, 0249 |
-| 45–49 | 0114, 0395 | | 85–92 | 0188, 0323 |
+| 40–44 | 0164, 0314 | | 80–84 | 0312, 0889 |
+| 45–49 | 0114, 0395 | | 85–92 | 0188, 0912 |
 | 50–54 | 0401, 0936 | | | |
 
 Two records first selected were replaced before the collection: in **0186** (40–44) and
 **0365** (55–59) lead ECG1 is mains interference — 50 Hz carries 98 % and 99 % of the signal
 power and no beat is visible. They were replaced by the next women in the same band on the
 same recorder, longest first: **0314** and **0420** (see `records.txt`).
+
+Three more were replaced after the first collection, for a weaker form of the same problem:
+in **0612** (30–34), **0249** (80–84) and **0323** (85–92) the 50 Hz ripple reaches 0.34,
+0.50 and 0.33 mV — as large as the P, Q and S waves. It cuts the arcs of the broad waves
+into 20 ms steps and fakes or hides the small ones, so their phasors measure the mains, not
+the heart. The rule is now: **50 Hz amplitude (48–52 Hz band) below 0.1 mV**. They were
+replaced by the next women in the same band on the same recorder, longest first, that meet
+it: **1053**, **0889** (0351 came first in 80–84 but carries 0.16 mV) and **0912**.
 
 ### Collected vs record files
 
@@ -188,13 +196,13 @@ records match exactly.**
 | record | artifact | extent |
 |---|---|---|
 | 0229 | a single spike to −14.4 / +18.2 mV | 3 samples at 480 s |
-| 0612 | a burst up to +19.0 mV | 3,279 samples, 682–686 s (0.4 % of the window) |
 
 They are in the original files (the round trip matches), so they stay in the raw stream.
 Any analysis has to handle them.
 
-All records also carry **50 Hz mains interference** at about 1–4 % of the signal power, and
-baseline drift. Both are part of the raw signal and are left untouched here.
+All records also carry **50 Hz mains interference**, below 0.1 mV in amplitude (most
+below 0.05 mV), and baseline drift. Both are part of the raw signal and are left untouched
+here; the analysis in `complex-events/` handles them.
 
 ### Data quality
 
