@@ -173,10 +173,7 @@ def main(rid, quiet=False):
         merged = [(p, q) for p, q in itertools.combinations(TR, 2) if dprime(col, p, q) <= 3]
         summary[col] = merged
         a.set_xlim(-.5, 1.3); a.set_xticks([]); a.set_ylabel(f"{lab}  (mV)", color=MUTE)
-        a.set_title(f"{'cosine' if i == 0 else 'sine'} alone: "
-                    f"{len(merged)} overlapping pair{'s' if len(merged) != 1 else ''} (d′ ≤ 3)"
-                    + ("\n" + "; ".join(f"{p} / {q}" for p, q in merged) if merged else ""),
-                    loc="left", color=INK, fontsize=11)
+        a.set_title(f"{'cosine' if i == 0 else 'sine'} alone", loc="left", color=INK, fontsize=11)
     a = fig.add_subplot(gs[2]); style(a, False); a.grid(color=GRID, lw=.6)
     a.axhline(0, color=MUTE, lw=.6); a.axvline(0, color=MUTE, lw=.6)
     for tr in TR:
@@ -190,9 +187,8 @@ def main(rid, quiet=False):
         e[e.transition == q][["cdot_cos", "cdot_sin"]].values)), p, q)
         for p, q in itertools.combinations(TR, 2))
     a.set_xlabel("cosine  Re ċ (mV)", color=MUTE); a.set_ylabel("sine  Im ċ (mV)", color=MUTE)
-    a.set_title(f"cosine + sine together: smallest separation {best[0]:.1f}\n"
-                f"(Mahalanobis, {best[1]} vs {best[2]})", loc="left", color=INK, fontsize=11)
-    head(fig, "Which input separates the five transitions?",
+    a.set_title("cosine + sine together", loc="left", color=INK, fontsize=11)
+    head(fig, "The five transitions in each input",
          f"Each dot = one transition ċ_n. {src}, {d.k.nunique():,} beats.")
     fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig7_cdot_levels.png", dpi=150,
                                                       facecolor=BG); plt.close()
@@ -207,8 +203,7 @@ def main(rid, quiet=False):
     a1.plot(Ck.index, np.abs(Ck.C), color="#1baf7a", lw=.8); a1.set_ylabel("|C_k|  (mV)", color=MUTE)
     a2.plot(Ck.index, Ck.RR, color=INK, lw=.8); a2.set_ylabel("RR  (ms)", color=MUTE)
     a2.set_xlabel("cycle index k", color=MUTE)
-    head(fig, f"|C_k| follows the rhythm — corr(|C|, RR) = {rho:+.2f}",
-         f"{rho_r:+.2f} with the 1/r prefactor removed (|C|·r). {src}.")
+    head(fig, "|C_k| and RR, beat by beat", f"{src}.")
     fig.tight_layout(rect=(0, 0, 1, 0.9)); save(fig, out / "fig8_absC_RR.png", dpi=150,
                                                       facecolor=BG); plt.close()
 
