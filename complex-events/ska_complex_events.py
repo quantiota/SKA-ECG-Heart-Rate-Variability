@@ -11,6 +11,17 @@ is the beat period:  RR = 2πr  →  r = RR / 2π  (arc length = time, 1 sample 
 
 (c and C, not z and Z: in SKA, z is the learner's knowledge and ż its flow.)
 
+The arc edges of the broad waves, P and T, are found on a copy of the signal with the mains
+line (50 Hz) notched out: on the raw trace the ripple riding on a broad, flat wave creates
+sign crossings every 20 ms, and the edge stops at one of them. The sharp waves Q, R, S keep
+their edges on the raw trace, where the notch would ring and smear them. The phasor itself
+is always summed on the raw signal. A wave that does not reach its expected sign on the
+signal used for its edges (P, R, T above the baseline; Q, S below) is absent: its arc is
+empty and c_j = 0 (column `present` = False). An arc never starts before the end of the previous
+wave's arc nor ends after the next wave's peak, so the five arcs of a beat never overlap.
+The baseline of a beat is the straight line joining the flat stretch before its P to the flat
+stretch before the next P, so it follows the drift across the beat.
+
 Candidate inputs for the SKA learner (one value per event):
     cos  = Re ċ_n        sin  = Im ċ_n
 
@@ -23,9 +34,12 @@ import argparse
 
 import numpy as np
 import pandas as pd
-from scipy.signal import find_peaks
+from scipy.ndimage import median_filter
+from scipy.signal import butter, filtfilt, find_peaks, iirnotch
 
 EVENTS = "PQRST"
+SIGN = dict(P=1, Q=-1, R=1, S=-1, T=1)          # expected sign of each wave
+BROAD = "PT"                                    # waves whose edges are found on the notched copy
 
 
 def same_sign_arc(xb, peak, lo, hi):
@@ -38,10 +52,47 @@ def same_sign_arc(xb, peak, lo, hi):
     return a, b + 1
 
 
-def detect(x, fs=1000, r_height=0.5):
+def edge_signal(x, fs=1000, mains=50.0):
+    """Copy of x with the mains line notched out, used only to find the edges of P and T."""
+    b, a = iirnotch(mains, 30.0, fs)
+    return filtfilt(b, a, x)
+
+
+def wave_arc(xeb, name, peak, lo, hi):
+    """Arc of a wave on a baseline-removed signal; (peak, peak) if the wave is absent."""
+    if np.sign(xeb[peak]) != SIGN[name]:
+        return peak, peak
+    return same_sign_arc(xeb, peak, lo, hi)
+
+
+def r_peaks(x, fs=1000, mains=50.0):
+    """R peak sample indices of the raw signal x (mV).
+
+    Found on a cleaned copy (mains notch -> 5-20 Hz QRS band -> squared slope -> 150 ms
+    moving energy -> peaks above 40 % of the local maximum, at least 300 ms apart), then
+    located on the raw signal: the highest sample within +/-60 ms, after removing the local
+    baseline. A fixed threshold on the raw trace would also take tall T waves for R.
+    """
+    y = edge_signal(x, fs, mains)
+    b, a = butter(3, [5.0, 20.0], btype="band", fs=fs)
+    y = filtfilt(b, a, y)
+    energy = np.convolve(np.gradient(y) ** 2, np.ones(int(0.15 * fs)) / (0.15 * fs), "same")
+
+    win = int(5 * fs)                                   # local maximum over 5 s windows
+    local_max = np.maximum.reduceat(energy, np.arange(0, len(energy), win))
+    threshold = 0.4 * np.repeat(local_max, win)[:len(energy)]
+    pk, _ = find_peaks(energy, height=threshold, distance=int(0.3 * fs))
+
+    xb = x - median_filter(x, size=int(0.2 * fs) | 1)   # remove the local baseline
+    h = int(0.06 * fs)
+    return np.array([p - h + np.argmax(xb[max(p - h, 0):p + h]) for p in pk
+                     if p - h >= 0 and p + h <= len(x)])
+
+
+def detect(x, fs=1000):
     """Locate P, Q, R, S, T peaks per beat (windows in ms around R) and a baseline per beat."""
     ms = fs / 1000
-    R, _ = find_peaks(x, height=r_height, distance=int(300 * ms))
+    R = r_peaks(x, fs)
     beats = []
     for i in range(1, len(R) - 1):
         r, rr_next = R[i], R[i + 1] - R[i]
@@ -58,20 +109,38 @@ def detect(x, fs=1000, r_height=0.5):
     return beats
 
 
-def complex_events(x, beats):
+def baseline_line(beats, k, idx, fs=1000):
+    """Baseline of beat k at sample indices idx: the straight line from this beat's flat
+    stretch before P to the next beat's (both measured 300-220 ms before R, as in detect())."""
+    (ev, b0), (ev2, b1) = beats[k], beats[k + 1]
+    t0, t1 = ev["R"] - int(260 * fs / 1000), ev2["R"] - int(260 * fs / 1000)
+    return b0 + (b1 - b0) * (idx - t0) / (t1 - t0)
+
+
+def complex_events(x, beats, fs=1000, mains=50.0):
+    xe = edge_signal(x, fs, mains)                           # P, T edges only; the sum stays raw
     rows = []
     for k in range(len(beats) - 1):
-        ev, base = beats[k]
+        ev = beats[k][0]
         RR = beats[k + 1][0]["P"] - ev["P"]                  # P peak → next P peak, ms
         r = RR / (2 * np.pi)
-        xb = x - base
+        off = max(ev["P"] - int(400 * fs / 1000), 0)         # the beat's window, baseline removed
+        stop = min(beats[k + 1][0]["P"] + 1, len(x))
+        L = baseline_line(beats, k, np.arange(off, stop), fs)
+        xb, xeb = x[off:stop] - L, xe[off:stop] - L
+        nxt = [ev[n] for n in EVENTS[1:]] + [beats[k + 1][0]["P"]]   # peak of the next wave
+        end = ev["P"] - int(150 * fs / 1000)                         # end of the previous arc
         for j, name in enumerate(EVENTS):
             pk = ev[name]
-            a, b = same_sign_arc(xb, pk, pk - 150, pk + 250)
+            lo, hi = max(pk - 150, end), min(pk + 250, nxt[j])       # an arc stays between its neighbours
+            a, b = wave_arc(xeb if name in BROAD else xb, name, pk - off, lo - off, hi - off)
+            a, b = a + off, b + off
+            end = max(end, b)
             t = np.arange(a, b)
-            c = np.sum(xb[t] * np.exp(1j * (t - ev["P"]) / r)) / r
+            c = np.sum(xb[t - off] * np.exp(1j * (t - ev["P"]) / r)) / r   # 0 for an absent wave
             rows.append(dict(event_index=5 * k + j, k=k, event=name, peak=pk, onset=a, offset=b,
-                             arc=b - a, amplitude=xb[pk], RR=RR, r=r, c_cos=c.real, c_sin=c.imag))
+                             arc=b - a, amplitude=xb[pk - off], present=b > a, RR=RR, r=r,
+                             c_cos=c.real, c_sin=c.imag))
     d = pd.DataFrame(rows)
     c = d.c_cos + 1j * d.c_sin
     cd = c.diff()                                            # ċ on the event index
@@ -87,7 +156,7 @@ def main():
     ap.add_argument("--fs", type=int, default=1000); ap.add_argument("--out", default="complex_events.csv")
     a = ap.parse_args()
     x = pd.read_csv(a.csv)[a.column].values
-    d = complex_events(x, detect(x, a.fs))
+    d = complex_events(x, detect(x, a.fs), a.fs)
     d.to_csv(a.out, index=False)
     print(f"{d.k.nunique()} beats, {len(d)} events → {a.out}")
 

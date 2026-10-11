@@ -261,7 +261,3 @@ Both write one row per event:
   marked absent (`present` = False) and gives c = 0: in this record, one S wave (beat 702).
 - Next data: the BITalino stream (1000 Hz, `bitalino-stream/`), then a pathological
   recording.
-
-- **Window edges:** a peak found on the first or last sample of its window is a window
-  edge, not a turning point. In record 1053, 28 % of the Q peaks sit on the −60 ms edge,
-  which splits P→Q into two sub-bands along ż.

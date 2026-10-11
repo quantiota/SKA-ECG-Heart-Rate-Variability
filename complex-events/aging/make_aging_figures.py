@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Reproduce the complex-events figures on an Autonomic Aging record.
 
-The construction is ska_complex_events.py, imported unchanged (same_sign_arc,
-complex_events). Beats are located with detect_beats.detect_robust(), which finds them on
+The construction is ska_complex_events.py (complex_events, and baseline_line for the baseline
+drawn in figure 2). Beats are located with detect_beats.detect_robust(), which finds them on
 a cleaned copy and keeps every measurement on the raw signal. The signal is lead ECG1 of an Autonomic Aging record, first 15 minutes,
 in mV, read with ecg-data-validation/ecg_chain.py.
 
@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.path.insert(0, str(HERE.parent.parent / "ecg-data-validation"))
-from ska_complex_events import same_sign_arc, complex_events   # unchanged
+from ska_complex_events import baseline_line, complex_events
 from detect_beats import detect_robust   # beats found on a cleaned copy, measured raw
 from ecg_chain import ECGRecord, read_subjects, AGE_BANDS
 
@@ -87,14 +87,15 @@ def main(rid, quiet=False):
     fig, ax = plt.subplots(figsize=(15, 5), facecolor=BG); style(ax)
     lo, hi = beats[0][0]["P"] - 250, beats[3][0]["P"] + 50
     ax.plot(np.arange(lo, hi), x[lo:hi], color=INK, lw=1)
-    for ev, base in beats[:3]:
-        xb = x - base
-        ax.plot([ev["P"] - 250, ev["T"] + 300], [base, base], color=MUTE, lw=.6, ls=":")
-        for n, pk in ev.items():
-            a, b = same_sign_arc(xb, pk, pk - 150, pk + 250)
-            ax.fill_between(np.arange(a, b), base, x[a:b], color=C[n], alpha=.35, lw=0)
-            ax.scatter([pk], [x[pk]], color=C[n], s=30, zorder=3)
-            ax.annotate(n, (pk, x[pk]), xytext=(0, 7 if xb[pk] > 0 else -14),
+    for k in range(3):
+        ev = beats[k][0]; idx = np.arange(ev["P"] - 250, beats[k + 1][0]["P"] - 250)
+        ax.plot(idx, baseline_line(beats, k, idx), color=MUTE, lw=.6, ls=":")
+        for w in d[d.k == k].itertuples():
+            t = np.arange(w.onset, w.offset)
+            if len(t):
+                ax.fill_between(t, baseline_line(beats, k, t), x[t], color=C[w.event], alpha=.35, lw=0)
+            ax.scatter([w.peak], [x[w.peak]], color=C[w.event], s=30, zorder=3)
+            ax.annotate(w.event, (w.peak, x[w.peak]), xytext=(0, 7 if w.amplitude > 0 else -14),
                         textcoords="offset points", ha="center", color=INK, fontsize=10,
                         fontweight="bold")
     ax.set_xlabel("sample index (1 ms)", color=MUTE); ax.set_ylabel("ECG (mV)", color=MUTE)
