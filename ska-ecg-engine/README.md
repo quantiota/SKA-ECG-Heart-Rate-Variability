@@ -15,7 +15,7 @@ lead ECG1, 1000 Hz.
 
 ## The question
 
-Each beat has five waves, P → Q → R → S → T, so a normal heart has five transitions:
+Each beat has five waves, P → Q → R → S → T, so a beat has five transitions:
 P→Q, Q→R, R→S, S→T, T→P. **Does the learner, reading one number per wave, find these five
 states on its own?** If it does, the phasor construction of `complex-events/` carries the
 structure of the beat.
