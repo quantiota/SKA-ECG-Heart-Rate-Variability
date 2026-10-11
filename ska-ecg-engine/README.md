@@ -1,7 +1,6 @@
 # SKA learning on the ECG event stream — results
 
-**What the SKA learner does with the five waves of the heartbeat: nine runs on one person to
-choose the input, then thirty women aged 18 to 92.**
+**What the SKA learner does with the five waves of the heartbeat, in thirty women aged 18 to 92.**
 
 This folder holds the **results** of the SKA engine: the learner's output for every step,
 and the figures. The engine code is not published. The data it reads is reproducible from
@@ -41,7 +40,7 @@ with **s** the scale (per mV). One step is one wave, five steps per beat. Each r
 loop of **3,500 steps = 700 beats**, the size limit of the learner's matrix. The time between
 steps is the real time between the peaks of successive waves.
 
-## What is measured
+## The learner's 3D space
 
 Three quantities per step, all in the run CSVs (P and ż computed from the learner's output):
 
@@ -63,10 +62,10 @@ kept for the thirty women.
 ## Thirty women
 
 The 30 women of [`ecg-data-validation/records.txt`](../ecg-data-validation/records.txt), two
-per age band from 18 to 92, lead ECG1, 1000 Hz. Cosine input. Each woman starts at scale 25;
-the scale is then set by hand, one woman at a time, from her figures. One cube per woman, at
-her selected scale: the 3,500 steps in (z, ż, P), one colour per transition. It opens in a
-browser, or in a headset (WebXR).
+per age band from 18 to 92, lead ECG1, 1000 Hz. Cosine input. Each of the other 29 women
+starts at scale 25; the scale is then set by hand, one woman at a time, from her figures.
+One cube per woman: the steps of her selected run in (z, ż, P), one colour per transition.
+It opens in a browser, or in a headset (WebXR).
 
 | age | record | scale | cube |
 |---|---|---|---|
@@ -108,16 +107,14 @@ browser, or in a headset (WebXR).
 - **ż is partly timing.** ż divides the change of z by the time since the previous wave, and
   that time differs a lot by transition (≈ 30 ms for Q→R, several hundred for T→P). Part of
   the separation along ż comes from the timing of the beat, not from the input x.
-- **z mostly counts steps**: The separation that
-  matters is in P and ż.
+- **z mostly counts steps.** The separation that matters is in P and ż.
 - **The bands are transition bands.** P compares each step with the previous one, so a band
   is a passage between two successive waves, not a property of one value. The order
   P → Q → R → S → T is therefore part of what is learned: it is the structure of the beat.
   In pathology that order breaks, and new transitions should appear as new bands.
 - **The scale is in mV.** The amplitude of the waves is a characteristic of the person, so
-  the same scale gives other people a narrower or wider input range (see `x_min`, `x_max` in
-  `complex-events/aging/summary_all.csv`). The ECG and the phasors stay raw; only the scale
-  of the sigmoid has to be set for each person.
+  the same scale gives other people a narrower or wider input range. The ECG and the phasors
+  stay raw; only the scale of the sigmoid has to be set for each person.
 
 ## Files
 
