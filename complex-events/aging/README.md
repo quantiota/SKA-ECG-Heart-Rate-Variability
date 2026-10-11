@@ -27,14 +27,14 @@ $$
 **3. The learner input**, the real part, scaled and squeezed into (0, 1):
 
 $$
-x_n = \frac{1}{1 + e^{-5\,\mathrm{Re}\,\dot c_n}}
+x_n = \frac{1}{1 + e^{-s\,\mathrm{Re}\,\dot c_n}}
 $$
 
 where h_j is the **mean height** of the wave over its arc (not its peak), θ_j the centre of
-the arc and φ_j its width, both as angles.
+the arc and φ_j its width, both as angles, and s is the scale (per mV).
 
-One x_n per wave, five per beat, in order P, Q, R, S, T. For this person x_n runs from 0.059
-to 0.952. The sections below build each line step by step.
+One x_n per wave, five per beat, in order P, Q, R, S, T. The sections below build each line
+step by step.
 
 ---
 
@@ -90,19 +90,10 @@ For a narrow arc (Q, R, S), 2 sin(φ_j/2) ≈ φ_j, so c_j ≈ h_j φ_j e^{iθ_j
 **product** of mean height and width appears. A tall narrow wave and a short wide wave with the
 same product give the same c. The width is still measured separately (column `arc`).
 
-### The five phasors of this person
+### An example: the R wave of this person
 
-| wave | peak height (mV) | arc (ms) | Re c (mV) | Im c (mV) |
-|---|---|---|---|---|
-| P | +0.16 | 70 | +0.038 ± 0.007 | −0.001 ± 0.002 |
-| Q | −0.26 | 28 | −0.020 ± 0.005 | −0.018 ± 0.004 |
-| R | +1.68 | 41 | +0.168 ± 0.019 | +0.247 ± 0.026 |
-| S | −0.11 | 15 | −0.003 ± 0.007 | −0.002 ± 0.042 |
-| T | +0.38 | 244 | −0.274 ± 0.053 | +0.087 ± 0.044 |
-
-The mean height h_j in the formula is about half the peak (0.45 to 0.58 of it for this
-person). For R: peak 1.68 mV, mean height 0.97 mV, arc 41 ms = 0.31 rad, so
-\|c_R\| ≈ 0.97 × 0.31 = 0.30 mV, as measured.
+R peaks at 1.68 mV over an arc of 39 ms; its mean height is about 1.0 mV and its arc
+0.30 rad, so \|c_R\| ≈ 1.0 × 0.30 = 0.30 mV, as measured.
 
 ![Phasors in the complex plane](figures/0060/fig4_c_complex_plane.png)
 
@@ -129,57 +120,41 @@ $$
 \qquad\longrightarrow\qquad
 \mathrm{Re}\,\dot c_n
 \qquad\longrightarrow\qquad
-x_n = \frac{1}{1 + e^{-5\,\mathrm{Re}\,\dot c_n}}
+x_n = \frac{1}{1 + e^{-s\,\mathrm{Re}\,\dot c_n}}
 $$
 
 1. **the return** ċ — the change from the previous wave to this one;
 2. **its real part** (the cosine) — the learner reads one real number;
-3. **squeezed into (0, 1)** by the sigmoid, scale 5.
+3. **squeezed into (0, 1)** by the sigmoid, scale s.
 
-Two real beats of this person:
+Two real beats of this person, at scale 25 (the scale of her cube in
+[`../../ska-ecg-engine/`](../../ska-ecg-engine/)):
 
 | beat | wave | change | Re ċ | **x — the input** |
 |---|---|---|---|---|
-| 10 | P | T→P | +0.221 | **0.752** |
-| 10 | Q | P→Q | −0.056 | **0.431** |
-| 10 | R | Q→R | +0.195 | **0.726** |
-| 10 | S | R→S | −0.182 | **0.287** |
-| 10 | T | S→T | −0.266 | **0.209** |
-| 11 | P | T→P | +0.306 | **0.822** |
-| 11 | Q | P→Q | −0.056 | **0.431** |
-| 11 | R | Q→R | +0.202 | **0.733** |
-| 11 | S | R→S | −0.187 | **0.282** |
-| 11 | T | S→T | −0.270 | **0.206** |
+| 10 | P | T→P | +0.280 | **0.999** |
+| 10 | Q | P→Q | −0.055 | **0.204** |
+| 10 | R | Q→R | +0.195 | **0.992** |
+| 10 | S | R→S | −0.181 | **0.011** |
+| 10 | T | S→T | −0.262 | **0.001** |
+| 11 | P | T→P | +0.302 | **0.999** |
+| 11 | Q | P→Q | −0.055 | **0.201** |
+| 11 | R | Q→R | +0.202 | **0.994** |
+| 11 | S | R→S | −0.187 | **0.009** |
+| 11 | T | S→T | −0.275 | **0.001** |
 
 The learner therefore receives five values that repeat with each beat and change slightly
-from one beat to the next. Over all 5,424 transitions x stays between 0.059 and 0.952 —
-none at the edges.
+from one beat to the next.
 
 ![Return along the event index](figures/0060/fig6_cdot_event_index.png)
 
 *Figure 6 — Re ċ and Im ċ along the event index, coloured by transition.*
 
-| transition | Re ċ (mV) | Im ċ (mV) |
-|---|---|---|
-| P→Q | −0.058 ± 0.005 | −0.017 ± 0.005 |
-| Q→R | +0.188 ± 0.019 | +0.265 ± 0.028 |
-| R→S | −0.171 ± 0.014 | −0.249 ± 0.030 |
-| S→T | −0.270 ± 0.053 | +0.089 ± 0.064 |
-| T→P | +0.312 ± 0.055 | −0.087 ± 0.044 |
-
-## 4. Does one number separate the five transitions?
+## 4. The two streams side by side
 
 ![Levels per input](figures/0060/fig7_cdot_levels.png)
 
 *Figure 7 — Left: Re ċ alone. Middle: Im ċ alone. Right: both together.*
-
-Two transitions overlap when d′ = |difference of means| / pooled std ≤ 3:
-
-| input | overlapping transitions |
-|---|---|
-| Re ċ (cosine) — **the input used** | R→S and S→T (d′ = 2.56) |
-| Im ċ (sine) | P→Q and S→T (2.34); P→Q and T→P (2.22) |
-| both together | none — five separate clusters |
 
 ## 5. The beat phasor and the rhythm
 
@@ -187,25 +162,24 @@ Two transitions overlap when d′ = |difference of means| / pooled std ≤ 3:
 
 *Figure 8 — The length of the beat phasor \|C_k\| and the beat duration RR, beat by beat.*
 
-For this person \|C_k\| barely follows RR (correlation +0.22).
-
 ---
 
 ## Beat detection
 
 The R peaks are found on a **cleaned copy** of the signal (50 Hz removed, QRS band 5–20 Hz),
 then located on the raw signal; every value above — peaks, arcs, phasors — is computed on the
-**raw** signal (`detect_beats.py`). The original detection, a fixed 0.5 mV threshold on the
-raw signal, gives false beats when the baseline drifts.
+**raw** signal (`r_peaks` and `detect` in `../ska_complex_events.py`). The other four waves are
+searched in fixed windows around each R peak, so the detection assumes the normal order
+P → Q → R → S → T. A wave that does not reach its expected sign is marked absent
+(`present` = False) and gives c = 0.
 
 ## Files
 
 | file | content |
 |---|---|
 | `make_aging_figures.py` | figures 2, 4–8 for one record, read from `ecg_steps` |
-| `detect_beats.py` | beat detection on a cleaned copy |
-| `complex_events_0060.csv` | one row per wave: peak, arc, peak height, RR, c, ċ, transition |
-| `summary_all.csv` | for each of the 30 selected women: beats, RR, separation of the transitions, corr(\|C\|, RR), and the range of the learner input x (`x_min`, `x_max`, `x_rails_pct` = % of x below 0.01 or above 0.99) |
+| `detect_beats.py` | kept for older imports; the detection lives in `../ska_complex_events.py` |
+| `complex_events_0060.csv` | one row per wave: peak, arc, peak height, present, RR, c, ċ, transition |
 | `figures/0060/` | the figures above |
 
 The phasor construction itself is `../ska_complex_events.py`, used unchanged.
@@ -216,5 +190,4 @@ stream collected into `ecg_steps` (see its README), and the packages in
 
 ```bash
 python make_aging_figures.py 0060     # figures and CSV for one person
-python make_aging_figures.py --all    # summary_all.csv only, no figures
 ```
