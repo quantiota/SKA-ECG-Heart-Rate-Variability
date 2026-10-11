@@ -111,7 +111,8 @@ It opens in a browser, or in a headset (WebXR).
 - **The bands are transition bands.** P compares each step with the previous one, so a band
   is a passage between two successive waves, not a property of one value. The order
   P → Q → R → S → T is therefore part of what is learned: it is the structure of the beat.
-  In pathology that order breaks, and new transitions should appear as new bands.
+   A missing wave keeps its place in the order with c = 0, so it appears as a separate
+  sub-band on its two neighbouring transitions.
 - **The scale is in mV.** The amplitude of the waves is a characteristic of the person, so
   the same scale gives other people a narrower or wider input range. The ECG and the phasors
   stay raw; only the scale of the sigmoid has to be set for each person.

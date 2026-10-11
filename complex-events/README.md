@@ -10,7 +10,7 @@ This folder documents the construction, shows it on a synthetic beat and on one 
 that decides which stream the learner reads. The step-by-step version for this person, with
 the learner input written out, is in [`aging/README.md`](aging/README.md).
 
-![One beat = one turn of a circle](figures/ska_ecg_0060_circle_realtime.gif)
+![One beat = one turn of a circle](aging/figures/0060/ska_ecg_0060_circle_realtime.gif)
 
 *Record 0060 (PhysioNet Autonomic Aging, woman 18–19), 200 beats in real time — each beat is
 shown for its own RR. Every beat is one turn of a circle whose circumference is its duration,
@@ -32,7 +32,7 @@ sample index (1 sample = 1 ms at 1000 Hz), each event carries:
 | **base arc** | the wave's duration, from onset to offset |
 
 The five delta_t add up to the period of the beat, **RR**. The flat stretches between
-waves (about 56 % of a beat) produce no event; they are the neutral hub that every wave
+waves produce no event; they are the neutral hub that every wave
 leaves and returns to.
 
 ![Five events per beat](figures/fig1_five_events.png)
@@ -93,16 +93,7 @@ On the real recording each event forms its own tight cluster in the complex plan
 
 *Figure 4 — c_j for 1,085 beats × 5 events.*
 
-| event | cosine Re c_j (mV) | sine Im c_j (mV) |
-|---|---|---|
-| P | +0.038 ± 0.007 | −0.001 ± 0.002 |
-| Q | −0.020 ± 0.005 | −0.018 ± 0.004 |
-| R | +0.168 ± 0.019 | +0.247 ± 0.026 |
-| S | −0.003 ± 0.007 | −0.002 ± 0.042 |
-| T | −0.274 ± 0.053 | +0.087 ± 0.044 |
-
-R is the tightest cluster; T, the longest wave (arc ≈ 244 ms), is the most spread out. P
-lies on the real axis by construction: angles are measured from the P peak.
+P lies on the real axis by construction: angles are measured from the P peak.
 
 Along the **event index n = 5k + j** (k = cycle index), the beat repeats the same five
 levels:
@@ -130,98 +121,32 @@ one value per event, 5 per beat.
 
 *Figure 6 — Cosine and sine of ċ along the event index, coloured by transition.*
 
-| transition | cosine Re ċ (mV) | sine Im ċ (mV) |
-|---|---|---|
-| P→Q | −0.058 ± 0.005 | −0.017 ± 0.005 |
-| Q→R | +0.188 ± 0.019 | +0.265 ± 0.028 |
-| R→S | −0.171 ± 0.014 | −0.249 ± 0.030 |
-| S→T | −0.270 ± 0.053 | +0.089 ± 0.064 |
-| T→P | +0.312 ± 0.055 | −0.087 ± 0.044 |
-
-## 5. First result: which stream separates the transitions
+## 5. The two streams side by side
 
 ![Levels per input](aging/figures/0060/fig7_cdot_levels.png)
 
 *Figure 7 — Each dot is one transition. Left: cosine alone. Middle: sine alone. Right:
 both together.*
 
-Separation between two transitions is measured as d′ = |mean difference| / pooled std
-(d′ > 3 means the levels do not overlap).
-
-| input | distinct levels | overlapping transitions |
-|---|---|---|
-| **cosine** (Re ċ) | **4 of 5** | R→S and S→T (d′ = 2.56) |
-| **sine** (Im ċ) | **3 of 5** | P→Q and S→T (d′ = 2.34); P→Q and T→P (d′ = 2.22) |
-| **cosine + sine** | **5 of 5** | none — smallest separation 6.7 (Mahalanobis, P→Q vs S→T) |
-
-- **Cosine** keeps more of the transitions apart. It brings together only R→S and S→T, the
-  two steps down after the R peak.
-- **Sine** carries the largest swings (Q→R at +0.27 mV, R→S at −0.25 mV, the QRS turning),
-  but places P→Q between S→T and T→P, the two transitions that touch the T wave.
-- **Together**, the five transitions are five separate clusters.
-- The few points away from every cluster (Q→R, R→S, S→T) come from **9 beats out of 1,085
-  in which S is absent**: the signal never goes below the baseline after R, so the R arc
-  runs on into the T wave. The same 9 beats are the 9 spikes of figure 8.
-
 ## 6. The test for the learner
 
-The SKA learner reads one raw stream. The test is run three times on the same recording,
-with everything else identical:
+The learner was run on this person with the cosine, the sine and their sum as input; the
+results, and the thirty women that followed with the cosine, are in
+[`../ska-ecg-engine/`](../ska-ecg-engine/).
 
-| run | learner input (one value per event index) |
-|---|---|
-| A | cosine: Re ċ_n |
-| B | sine: Im ċ_n |
-| C | (reference) the raw 1 ms waveform |
-
-For each run, record:
-
-1. **The probability bands** that emerge in the learner's own 3D space (z, ż, P) — its
-   knowledge z, the knowledge flow ż and the transition probability P — how many, and
-   whether they match the five transitions.
-2. **Band stability** — distances between bands after the learning phase.
-3. **The path** of the learner through the bands, beat after beat.
-
-The stream that gives **five stable, separated bands** — one per transition — is the input.
-The first result above predicts that the **cosine** stream will separate more transitions
-than the sine stream, and that a single stream cannot separate all five; if so, the two
-streams can be learned as two runs and compared side by side.
-
-The decisive test is then on pathology: on a pathological recording, the chosen stream
-should show **new bands** — transitions that never occur in a normal heart (T→Q when P is
-missing in atrial fibrillation, T→R for a premature ventricular beat, P→P for a blocked
-beat).
+The construction assumes the normal order P → Q → R → S → T (see Data and limits). On a
+pathological recording, where waves can be missing or out of order, the event detection has
+to be adapted first.
 
 ## 7. A note on rhythm
 
-The beat-level number \|C_k\| follows the rhythm moderately: on this recording its
-correlation with RR is +0.22, and +0.49 once the 9 beats without S are left out (they are the
-9 spikes in the top panel). The mechanism expected from the construction — R and S point in
-opposite directions, their angular gap Δt / r shrinks when RR is long, so they cancel more —
-has little to act on here: in this person S is very small (median |c_S| ≈ 0.006 mV against 0.30 mV
-for R).
+The beat-level number \|C_k\| and the rhythm, beat by beat. The mechanism expected from the
+construction: R and S point in opposite directions, and their angular gap Δt / r shrinks when
+RR is long, so they cancel more.
 
 ![|C| and RR per beat](aging/figures/0060/fig8_absC_RR.png)
 
 *Figure 8 — \|C_k\| and RR across the cycle index.*
-
-The rhythm also acts inside the bands of ċ. Within a transition, the value moves with RR
-for the transitions around the QRS (correlation with RR):
-
-| transition | cosine Re ċ | sine Im ċ |
-|---|---|---|
-| P→Q | +0.22 | +0.41 |
-| Q→R | +0.24 | −0.91 |
-| R→S | −0.37 | +0.90 |
-| S→T | +0.16 | +0.80 |
-| T→P | +0.08 | −0.28 |
-
-(the 9 beats without S left out)
-
-So RR sets *where inside its band* a transition falls, while the gaps *between* bands
-remain much larger (figure 7). The **sine** follows RR closely around the QRS (Q→R, R→S,
-S→T); the **cosine** follows it only weakly. When the learner is run, the width of each band should be read with this in mind: on
-a recording with large RR swings the bands will widen, without new bands appearing.
 
 ## Related work
 
@@ -317,6 +242,7 @@ Both write one row per event:
 | `k`, `event` | cycle index and event name (P, Q, R, S, T) |
 | `peak`, `onset`, `offset`, `arc` | sample indices of the peak and base arc; arc length in ms |
 | `amplitude` | signed peak − baseline (mV) |
+| `present` | False when the wave is not found in the beat (then arc = 0 and c = 0) |
 | `RR`, `r` | beat period (P peak → next P peak) and radius RR / 2π |
 | `c_cos`, `c_sin` | Re c_j, Im c_j |
 | `transition` | previous event → this event |
@@ -325,18 +251,17 @@ Both write one row per event:
 ## Data and limits
 
 - **Real data:** record 0060 of the PhysioNet Autonomic Aging database — one healthy woman
-  aged 18–19, lead ECG1, 1000 Hz, the first 15 minutes, 1,085 beats (RR 827 ± 41 ms). It is
-  one person: the numbers above are a first look, not a result about hearts in general.
+  aged 18–19, lead ECG1, 1000 Hz, the first 15 minutes, 1,085 beats. It is one person: a
+  first look, not a result about hearts in general.
 - **Synthetic beat** (figures 1 and 3): five Gaussian waves with normal lead-II values,
   for illustration only.
 - **Event detection** finds the R peaks on a cleaned copy of the signal (50 Hz removed,
-  QRS band 5–20 Hz; `aging/detect_beats.py`) and measures everything on the raw signal. It
+  QRS band 5–20 Hz; `ska_complex_events.py`) and measures everything on the raw signal. It
   then uses fixed windows around each R peak (P: −280 to −80 ms, Q: −60 to
   0 ms, S: 0 to +60 ms, T: +120 ms to 60 % of the next RR). It assumes a normal beat order
   and will need to be adapted for pathological beats, where events can be missing or out
   of order.
-- **Base arcs** are same-sign runs around each peak. When a wave is absent the rule still
-  assigns it: in 9 of the 1,085 beats S never goes below the baseline, so the R arc runs on
-  through the T wave (up to the 250 ms window) and S is a point at about zero.
+- **Base arcs** are same-sign runs around each peak. A wave that is not found in a beat is
+  marked absent (`present` = False) and gives c = 0: in this record, one S wave (beat 702).
 - Next data: the BITalino stream (1000 Hz, `bitalino-stream/`), then a pathological
   recording.

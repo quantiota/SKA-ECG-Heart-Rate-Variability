@@ -63,8 +63,7 @@ tell larger losses apart, so they are counted modulo 16 — another reason to pr
 Bluetooth.
 
 The simulator (`--simulate`) produces a synthetic ECG with real beat-to-beat variability —
-respiratory sinus arrhythmia plus beat noise, SDNN ≈ 30 ms over 5 minutes — so an HRV
-pipeline can be tested end to end without the board.
+respiratory sinus arrhythmia plus random beat-to-beat variability, SDNN ≈ 30 ms over 5 minutes — so an HRV pipeline can be tested end to end without the board.
 
 ## Technical specifications
 
