@@ -1,16 +1,16 @@
 # SKA learning on the ECG event stream — results
 
-**What the SKA learner does with the five waves of the heartbeat: nine runs on one person,
-three inputs × three scales.**
+**What the SKA learner does with the five waves of the heartbeat: nine runs on one person to
+choose the input, then thirty women aged 18 to 92.**
 
 This folder holds the **results** of the SKA engine: the learner's output for every step,
 and the figures. The engine code is not published. The data it reads is reproducible from
 the two phase-1 folders: [`ecg-data-validation/`](../ecg-data-validation/) (the collected
 stream `ecg_steps`) and [`complex-events/`](../complex-events/) (the phasors and the input).
 
-The person is **record 0060** of the PhysioNet
-[Autonomic Aging database](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/):
-a woman aged 18–19, lead ECG1, 1000 Hz, 15 minutes, 1,085 beats.
+The women are 30 records of the PhysioNet
+[Autonomic Aging database](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/),
+lead ECG1, 1000 Hz.
 
 ---
 
@@ -37,7 +37,7 @@ $$
 | `cdot_sin` | Im ċ_n — sine |
 | `cdot_cossin` | Re ċ_n + Im ċ_n — cosine + sine |
 
-with **s = 5, 25 or 50** (per mV). One step is one wave, five steps per beat. Each run is one
+with **s** the scale (per mV). One step is one wave, five steps per beat. Each run is one
 loop of **3,500 steps = 700 beats**, the size limit of the learner's matrix. The time between
 steps is the real time between the peaks of successive waves.
 
@@ -54,69 +54,62 @@ Three quantities per step, all in the run CSVs (P and ż computed from the learn
 (z, ż, P) is the learner's own 3D space. A state of the heart is **found** when its
 transition forms its own band there.
 
-## Record 0060: nine runs
+## Record 0060: choosing the input
 
-| input | scale | x at 0 or 1 | distinct H curves | P bands overlapping (d′ ≤ 3) | in (ż, P), ż central | in (ż, P), ż backward |
-|---|---|---|---|---|---|---|
-| cosine | 5 | 0 % | **5** | P→Q/T→P, P→Q/R→S, Q→R/S→T | **none** | **none** |
-| cosine | 25 | 56 % | 3 | **none** | **none** | **none** |
-| cosine | 50 | 80 % | 3 | P→Q/R→S | P→Q/R→S (1.8) | none |
-| sine | 5 | 0 % | 4 | P→Q/T→P, Q→R/T→P, S→T/T→P | S→T/T→P (2.9) | none |
-| sine | 25 | 40 % | 4 | 6 pairs | none | none |
-| sine | 50 | 59 % | 3 | 4 pairs | none | P→Q/S→T (2.2) |
-| cosine + sine | 5 | 0 % | **5** | 6 pairs | S→T/T→P (2.3) | S→T/T→P (1.1) |
-| cosine + sine | 25 | 62 % | 3 | Q→R/T→P | none | none |
-| cosine + sine | 50 | 79 % | 2 | Q→R/T→P | none | none |
+A woman aged 18–19, 15 minutes, 1,085 beats. Nine runs: the three inputs × scales 5, 25
+and 50, figures in [`results/0060/figures/`](results/0060/figures/). The cosine is the input
+kept for the thirty women.
 
-Measured after step 500 (the learning phase). Two H curves count as one when their median
-gap is under 3 % of their depth; two transitions overlap in (ż, P) when their Mahalanobis
-distance is under 3. The (ż, P) result depends on how ż is taken on three rows; the
-cosine at scales 5 and 25 separates all five under both definitions. Leaving out the 9 beats
-without S changes none of the rows.
+## Thirty women
 
-Mean P per transition:
+The 30 women of [`ecg-data-validation/records.txt`](../ecg-data-validation/records.txt), two
+per age band from 18 to 92, lead ECG1, 1000 Hz. Cosine input. Each woman starts at scale 25;
+the scale is then set by hand, one woman at a time, from her figures. One cube per woman, at
+her selected scale: the 3,500 steps in (z, ż, P), one colour per transition. It opens in a
+browser, or in a headset (WebXR).
 
-| input | scale | P→Q | Q→R | R→S | S→T | T→P |
-|---|---|---|---|---|---|---|
-| cosine | 5 | 0.56 | 0.74 | 0.46 | 0.82 | 0.57 |
-| cosine | 25 | 0.14 | 0.52 | 0.02 | 0.95 | 0.44 |
-| cosine | 50 | 0.03 | 0.46 | 0.01 | 1.00 | 0.44 |
-| sine | 5 | 0.89 | 0.74 | 0.30 | 0.64 | 0.72 |
-| sine | 25 | 0.67 | 0.61 | 0.02 | 0.46 | 0.20 |
-| sine | 50 | 0.62 | 0.56 | 0.02 | 0.45 | 0.09 |
-| cosine + sine | 5 | 0.59 | 0.65 | 0.11 | 0.72 | 0.64 |
-| cosine + sine | 25 | 0.09 | 0.49 | 0.01 | 0.91 | 0.45 |
-| cosine + sine | 50 | 0.01 | 0.44 | 0.01 | 0.99 | 0.44 |
-
-## What it shows
-
-- **The five states emerge.** With the cosine input, the learner separates all five
-  transitions: in H at scale 5 (five distinct curves), in P at scale 25 (five bands, no
-  pair overlapping), and in the (ż, P) plane at both, whichever way ż is taken.
-- **The scale trades H against P.** At low scale the input keeps its full range and H keeps
-  the five states apart. At higher scale the input becomes almost binary: H merges the
-  transitions that land on the same edge (Q→R with T→P at x ≈ 1, R→S with S→T at x ≈ 0),
-  while P — which compares each step with the previous one — sharpens into thin bands.
-  At 50 P starts merging again.
-- **The cosine carries the most.** The sine merges the transitions around the T wave at
-  every scale; the sum of cosine and sine is not better than the cosine alone.
-- **The learner registers a change of state by itself.** Around step 3,270 (beat 654, minute
-  9) the R→S band shifts in the scale-5 runs: P rises from 0.29 to 0.32 with the sine, and
-  from 0.104 to 0.111 with cosine + sine. The same beat is where the rhythm slows (mean RR
-  818 ms over beats 550–649, 848 ms over beats 654–700, the end of the run) and where the
-  phasors step in `complex-events/` (figures 6 and 8).
+| age | record | scale | cube |
+|---|---|---|---|
+| 18–19 | 0060 | 25 | [`ska_ecg_0060_scale25_vr.html`](vr/ska_ecg_0060_scale25_vr.html) |
+| 18–19 | 0465 | 70 | [`ska_ecg_0465_scale70_vr.html`](vr/ska_ecg_0465_scale70_vr.html) |
+| 20–24 | 1112 | 50 | [`ska_ecg_1112_scale50_vr.html`](vr/ska_ecg_1112_scale50_vr.html) |
+| 20–24 | 0002 | 60 | [`ska_ecg_0002_scale60_vr.html`](vr/ska_ecg_0002_scale60_vr.html) |
+| 25–29 | 0155 | 25 | [`ska_ecg_0155_scale25_vr.html`](vr/ska_ecg_0155_scale25_vr.html) |
+| 25–29 | 0515 | 35 | [`ska_ecg_0515_scale35_vr.html`](vr/ska_ecg_0515_scale35_vr.html) |
+| 30–34 | 1053 | 25 | [`ska_ecg_1053_scale25_vr.html`](vr/ska_ecg_1053_scale25_vr.html) |
+| 30–34 | 0275 | 70 | [`ska_ecg_0275_scale70_vr.html`](vr/ska_ecg_0275_scale70_vr.html) |
+| 35–39 | 0897 | 25 | [`ska_ecg_0897_scale25_vr.html`](vr/ska_ecg_0897_scale25_vr.html) |
+| 35–39 | 0248 | 25 | [`ska_ecg_0248_scale25_vr.html`](vr/ska_ecg_0248_scale25_vr.html) |
+| 40–44 | 0164 | 40 | [`ska_ecg_0164_scale40_vr.html`](vr/ska_ecg_0164_scale40_vr.html) |
+| 40–44 | 0314 | 25 | [`ska_ecg_0314_scale25_vr.html`](vr/ska_ecg_0314_scale25_vr.html) |
+| 45–49 | 0114 | 25 | [`ska_ecg_0114_scale25_vr.html`](vr/ska_ecg_0114_scale25_vr.html) |
+| 45–49 | 0395 | 30 | [`ska_ecg_0395_scale30_vr.html`](vr/ska_ecg_0395_scale30_vr.html) |
+| 50–54 | 0401 | 35 | [`ska_ecg_0401_scale35_vr.html`](vr/ska_ecg_0401_scale35_vr.html) |
+| 50–54 | 0936 | 25 | [`ska_ecg_0936_scale25_vr.html`](vr/ska_ecg_0936_scale25_vr.html) |
+| 55–59 | 0082 | 25 | [`ska_ecg_0082_scale25_vr.html`](vr/ska_ecg_0082_scale25_vr.html) |
+| 55–59 | 0420 | 35 | [`ska_ecg_0420_scale35_vr.html`](vr/ska_ecg_0420_scale35_vr.html) |
+| 60–64 | 0053 | 25 | [`ska_ecg_0053_scale25_vr.html`](vr/ska_ecg_0053_scale25_vr.html) |
+| 60–64 | 0942 | 25 | [`ska_ecg_0942_scale25_vr.html`](vr/ska_ecg_0942_scale25_vr.html) |
+| 65–69 | 0413 | 35 | [`ska_ecg_0413_scale35_vr.html`](vr/ska_ecg_0413_scale35_vr.html) |
+| 65–69 | 0214 | 25 | [`ska_ecg_0214_scale25_vr.html`](vr/ska_ecg_0214_scale25_vr.html) |
+| 70–74 | 0229 | 5 | [`ska_ecg_0229_scale5_vr.html`](vr/ska_ecg_0229_scale5_vr.html) |
+| 70–74 | 0237 | 25 | [`ska_ecg_0237_scale25_vr.html`](vr/ska_ecg_0237_scale25_vr.html) |
+| 75–79 | 0153 | 25 | [`ska_ecg_0153_scale25_vr.html`](vr/ska_ecg_0153_scale25_vr.html) |
+| 75–79 | 0276 | 25 | [`ska_ecg_0276_scale25_vr.html`](vr/ska_ecg_0276_scale25_vr.html) |
+| 80–84 | 0312 | 25 | [`ska_ecg_0312_scale25_vr.html`](vr/ska_ecg_0312_scale25_vr.html) |
+| 80–84 | 0889 | 35 | [`ska_ecg_0889_scale35_vr.html`](vr/ska_ecg_0889_scale35_vr.html) |
+| 85–92 | 0188 | 30 | [`ska_ecg_0188_scale30_vr.html`](vr/ska_ecg_0188_scale30_vr.html) |
+| 85–92 | 0912 | 35 | [`ska_ecg_0912_scale35_vr.html`](vr/ska_ecg_0912_scale35_vr.html) |
 
 ## Limits
 
-- **One person**, healthy, 15 minutes, one lead. Nothing here is a result about hearts in
-  general.
+- **Thirty women**, healthy, one lead, 700 beats each. Nothing here is a result about hearts
+  in general.
 - **ż is partly timing.** ż divides the change of z by the time since the previous wave, and
   that time differs a lot by transition (≈ 30 ms for Q→R, several hundred for T→P). Part of
   the separation along ż comes from the timing of the beat, not from the input x.
-- **z mostly counts steps**: it grows with the size of the matrix. The separation that
+- **z mostly counts steps**: The separation that
   matters is in P and ż.
-- **9 beats of 1,085 have no S wave in 0060** (see `complex-events/`); they are the few
-  points away from their bands.
 - **The bands are transition bands.** P compares each step with the previous one, so a band
   is a passage between two successive waves, not a property of one value. The order
   P → Q → R → S → T is therefore part of what is learned: it is the structure of the beat.
@@ -126,37 +119,39 @@ Mean P per transition:
   `complex-events/aging/summary_all.csv`). The ECG and the phasors stay raw; only the scale
   of the sigmoid has to be set for each person.
 
-## Next test
-
-**Other women, same dataset, with the scale calibrated by hand.** The other 29 women
-collected in phase 1 — the records listed in
-[`ecg-data-validation/records.txt`](../ecg-data-validation/records.txt), two per age band from
-18 to 92, lead ECG1, 1000 Hz, already in `ecg_steps`. Cosine input, the scale set by hand for
-each woman. The question: do the five bands emerge for every healthy heart, and do they move
-with age?
-
 ## Files
 
 ```
+build_ecg_vr.py              fills the cube template with one run (record, scale)
+ska_ecg_vr_template.html     the cube (Three.js), placeholders __DATA__ and __DESCRIPTION__
 results/
-└── 0060/      record 0060: ska_0060_runs.csv (9 runs) and figures/ (21 figures)
+└── <record>/                one folder per woman (30)
+    ├── ska_<record>_runs.csv    every run of the record, one row per step
+    └── figures/
+vr/
+└── ska_ecg_<record>_scale<s>_vr.html   one cube per woman, at her selected scale (30)
 ```
 
-For each input (`cdot_cos`, `cdot_sin`, `cdot_cossin`) and scale (no suffix = scale 5,
-`_scale25`, `_scale50`): `ska_0060_<input>[_scaleN].png` (H and P along the steps) and
-`bands3d_0060_<input>[_scaleN].png` (the bands in (z, ż, P)); plus
-`bands3d_0060_compare[_scaleN].png`, the three inputs side by side.
+`figures/` holds, for each run, `ska_*` (H and P along the steps) and `bands3d_*` (the bands in
+(z, ż, P)); the selected run ends in `_selected`.
 
-## Data — `results/0060/ska_0060_runs.csv`
+To rebuild a cube:
 
-One row per step, 9 runs × 3,500 steps = 31,500 rows, ordered by input, scale and step.
+```bash
+python build_ecg_vr.py ska_ecg_vr_template.html results/0912/ska_0912_runs.csv 35 "85–92" vr/ska_ecg_0912_scale35_vr.html
+```
+
+## Data — `results/<record>/ska_<record>_runs.csv`
+
+One row per step, 3,500 steps per run, ordered by input, scale and step. Record 0060 has the
+9 runs above (31,500 rows); the other women have one cosine run per scale tried.
 
 | column | meaning |
 |---|---|
 | `record_id`, `input`, `scale` | the run |
 | `event`, `transition` | the wave (P, Q, R, S, T) and the transition into it |
 | `event_index`, `k`, `peak` | step n = 5k + j, beat k, sample index of the wave's peak |
-| `value_cos`, `value_sin` | Re c_n, Im c_n (mV) |
+| `value_cos`, `value_sin` | Re c_n, Im c_n (mV); 0 when the wave is absent |
 | `value_return` | u_n: Re ċ_n, Im ċ_n or their sum (mV) |
 | `x_input` | x_n, what the learner reads |
 | `rr` | the beat's duration (ms) |
