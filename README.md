@@ -127,7 +127,7 @@ Each beat has five waves, P → Q → R → S → T, and each wave is one step o
 (see [`complex-events/`](complex-events/)). The states are the five waves, so two
 consecutive waves form one of 5 × 5 = 25 transitions; 25 values need five bits, so each
 transition is written as a 5-bit word, and the stream of words is the binary information
-flow. A normal beat uses only five of them — P→Q, Q→R, R→S, S→T, T→P — repeating as a
+flow. The beat order P → Q → R → S → T uses only five of them — repeating as a
 fixed cycle. The other twenty are the transitions outside that cycle, such as T→Q, T→R or
 P→P; which of them occur, and what they correspond to, is for cardiologists to establish.
 
