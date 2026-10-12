@@ -1,0 +1,44 @@
+# VR Library
+
+3D cubes of the learner's space (z, ż, P), to explore on a desktop or in a VR headset.
+Each cube shows the transition bands the SKA learner registers from one ECG record.
+
+**Application:** virtual reality in cardiology with an AI assistant. The cardiologist
+navigates the bands with a headset; the assistant measures what the selected beats share.
+
+## Cubes
+
+PhysioNet Autonomic Aging, women, lead ECG1, 1000 Hz. Open a cube and press **Enter VR** in the headset browser.
+
+| age band | record | scale | cube |
+|---|---|---|---|
+| 18–19 | 0060 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0060_scale25_vr.html) |
+| 18–19 | 0465 | 70 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0465_scale70_vr.html) |
+| 20–24 | 0002 | 60 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0002_scale60_vr.html) |
+| 20–24 | 1112 | 50 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_1112_scale50_vr.html) |
+| 25–29 | 0155 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0155_scale25_vr.html) |
+| 25–29 | 0515 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0515_scale35_vr.html) |
+| 30–34 | 0275 | 70 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0275_scale70_vr.html) |
+| 30–34 | 1053 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_1053_scale25_vr.html) |
+| 35–39 | 0248 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0248_scale25_vr.html) |
+| 35–39 | 0897 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0897_scale25_vr.html) |
+| 40–44 | 0164 | 40 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0164_scale40_vr.html) |
+| 40–44 | 0314 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0314_scale25_vr.html) |
+| 45–49 | 0114 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0114_scale25_vr.html) |
+| 45–49 | 0395 | 30 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0395_scale30_vr.html) |
+| 50–54 | 0401 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0401_scale35_vr.html) |
+| 50–54 | 0936 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0936_scale25_vr.html) |
+| 55–59 | 0082 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0082_scale25_vr.html) |
+| 55–59 | 0420 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0420_scale35_vr.html) |
+| 60–64 | 0053 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0053_scale25_vr.html) |
+| 60–64 | 0942 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0942_scale25_vr.html) |
+| 65–69 | 0214 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0214_scale25_vr.html) |
+| 65–69 | 0413 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0413_scale35_vr.html) |
+| 70–74 | 0229 | 5 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0229_scale5_vr.html) |
+| 70–74 | 0237 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0237_scale25_vr.html) |
+| 75–79 | 0153 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0153_scale25_vr.html) |
+| 75–79 | 0276 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0276_scale25_vr.html) |
+| 80–84 | 0312 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0312_scale25_vr.html) |
+| 80–84 | 0889 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0889_scale35_vr.html) |
+| 85–92 | 0188 | 30 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0188_scale30_vr.html) |
+| 85–92 | 0912 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0912_scale35_vr.html) |
