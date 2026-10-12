@@ -6,9 +6,9 @@ The ECG comes from 30 records of the PhysioNet
 [Autonomic Aging database](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/)
 (lead ECG1, 1000 Hz, the first 15 minutes, 2 women per age band). The SKA results are the
 output of the SKA real-time learner reading the five waves of each heartbeat. The method is
-described in the repository
-[SKA-ECG-Heart-Rate-Variability](https://github.com/quantiota/SKA-ECG-Heart-Rate-Variability).
-The learner itself is not included: the kit holds its output, not its code.
+described in this repository: [`complex-events/`](../complex-events/) for the input, and
+[`ska-ecg-engine/`](../ska-ecg-engine/) for the results. The learner itself is not included:
+the kit holds its output, not its code.
 
 ## Contents
 
@@ -121,5 +121,5 @@ waves of one beat.
 
 ## License
 
-Scripts: MIT, as the repository. ECG data: from PhysioNet, under the license of the Autonomic
+Scripts: MIT, as this repository. ECG data: from PhysioNet, under the license of the Autonomic
 Aging database; cite the database when you use it.
