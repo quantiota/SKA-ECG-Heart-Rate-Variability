@@ -42,3 +42,21 @@ PhysioNet Autonomic Aging, women, lead ECG1, 1000 Hz. Open a cube and press **En
 | 80–84 | 0889 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0889_scale35_vr.html) |
 | 85–92 | 0188 | 30 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0188_scale30_vr.html) |
 | 85–92 | 0912 | 35 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/vr-library/ska_ecg_0912_scale35_vr.html) |
+
+## The 18–19 group
+
+10 women aged 18–19, same database, lead and window: 0060 and 0465 from the table above, and
+8 more on the same recorder (device 0), longest recordings first. The 8 have one run so far, at scale 25.
+
+| record | scale | cube |
+|---|---|---|
+| 0060 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0060_scale25_vr.html) |
+| 0465 | 70 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0465_scale70_vr.html) |
+| 0886 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0886_scale25_vr.html) |
+| 1088 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_1088_scale25_vr.html) |
+| 0697 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0697_scale25_vr.html) |
+| 0044 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0044_scale25_vr.html) |
+| 0098 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0098_scale25_vr.html) |
+| 0239 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0239_scale25_vr.html) |
+| 0262 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0262_scale25_vr.html) |
+| 0290 | 25 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/Starter-Kit/vr/ska_ecg_0290_scale25_vr.html) |

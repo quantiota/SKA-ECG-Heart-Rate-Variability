@@ -1,206 +1,137 @@
-# SKA Heart Rate Variability
+# SKA-ECG starter kit
 
- [![arXiv](https://img.shields.io/badge/arXiv-2503.13942-b31b1b)](https://arxiv.org/abs/2503.13942)   [![arXiv](https://img.shields.io/badge/arXiv-2504.03214-b31b1b)](https://arxiv.org/abs/2504.03214)   [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-SKA-orange)](https://huggingface.co/quant-iota) [![Sponsor](https://img.shields.io/badge/Sponsor-quantiota-ea4aaa?logo=github-sponsors)](https://github.com/sponsors/quantiota)
+**The data and the SKA results of 38 women, ready to load and plot.**
 
+The ECG comes from 38 records of the PhysioNet
+[Autonomic Aging database](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/)
+(women, lead ECG1, 1000 Hz, the first 15 minutes), in two sets:
 
-**Heart Rate Variability (HRV) Exploration with Structured Knowledge Accumulation (SKA) and Entropy-Based Learning**
+- **30 women aged 18 to 92**, 2 per age band;
+- **a group of 10 women aged 18–19**: 0060 and 0465 from the 30, and 0886, 1088, 0697, 0044,
+  0098, 0239, 0262, 0290.
 
-This project applies the SKA entropy learning framework to the raw ECG waveform, streamed in real time, and to the heart rate variability (HRV) it carries — aiming to register informational regimes and subtle physiological patterns not accessible with classical statistics or supervised machine learning.
+The SKA results are the
+output of the SKA real-time learner reading the five waves of each heartbeat. The method is
+described in this repository: [`complex-events/`](../complex-events/) for the input, and
+[`ska-ecg-engine/`](../ska-ecg-engine/) for the results. The learner itself is not included:
+the kit holds its output, not its code.
 
+## Contents
 
+```
+Starter-Kit/
+├── README.md
+├── data/
+│   ├── ecg_steps/<record>.csv.gz   raw ECG, one row per sample, one file per woman
+│   ├── ecg_ska_results.csv.gz      SKA learner output, one row per step, every run
+│   └── selected_scales.csv         record_id, age_band, the scale selected for that woman
+├── scripts/
+│   ├── load_questdb.py             load the CSV files into QuestDB (the original two tables)
+│   ├── plot_record.py              2D and 3D figures for one record and one scale
+│   ├── build_cube.py               3D cube (HTML) for one record and one scale
+│   ├── ska_data.py                 shared loader (computes P and ż)
+│   └── ska_ecg_vr_template.html    the cube template
+└── vr/                             38 cubes, one per woman, at her selected scale
+```
 
-![The heartbeat in the learner's space](ska_ecg_0060_cube.gif)
+`vr/` holds the cubes of the 38 women at the scale selected for each (two tables in `vr/README.md`). The other scales tried
+are in the data: build their cubes with `scripts/build_cube.py <record> <scale>`, e.g.
+`python scripts/build_cube.py 0002 25`.
 
-*The five transitions of the heartbeat in the SKA learner's space (z, ż, P), record 0060 (PhysioNet Autonomic Aging, 700 beats, input Re ċ, scale 25). Each transition keeps a constant probability across the phase space: while knowledge z grows eighteenfold and its flow ż changes, P stays fixed (drift ≤ 0.007). The five flat sheets — S→T 0.94, Q→R 0.52, T→P 0.44, P→Q 0.14, R→S 0.02 — are the five transitions of this woman's beat, registered by the learner.* [Download](ecg_transition_probability_vr.html) and open on your desktop.
+The scripts read the CSV files directly; QuestDB is optional.
 
+## Two ways to read the data
 
+**pandas**, directly from the files:
 
-[<img src="ecg_thumbnail.png" width="1280" height="720"
-/>](https://youtu.be/gYEbg5lCm6o)
+```python
+import pandas as pd
+ecg = pd.read_csv("data/ecg_steps/0060.csv.gz", dtype={"record_id": str})
+ska = pd.read_csv("data/ecg_ska_results.csv.gz", dtype={"record_id": str})
+```
 
-*The heartbeat in the learner's space: 700 beats of one healthy heart, read wave by wave by the SKA real-time learner, settle into five bands, one for each transition P→Q→R→S→T.*
+**QuestDB**, to work in SQL: load the two tables with `scripts/load_questdb.py` (see Quick start).
 
+## Quick start
 
-## Status
-
-Early stage. The work runs in two steps:
-
-1. **Public data first.** The [Autonomic Aging](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/)
-   database on PhysioNet — resting ECG at 1000 Hz from 1,121 healthy subjects aged 18 to 92 —
-   will be replayed as a stream into QuestDB and learned. Heart rate variability is known to
-   decline with age, which gives the first readout a reference to be checked against.
-2. **Then the device.** [`bitalino-stream/`](bitalino-stream/) reads the raw ECG waveform from
-   a BITalino board at the same 1000 Hz and writes it, sample by sample, into the same table,
-   so moving from step 1 to step 2 changes only the source.
-
-Results, figures and the sequence library will be added as runs are collected.
-
-The SKA real-time engine is proprietary and is not included in this repository.
-
-
-
-## Quick Start
+Python 3 with numpy, pandas, matplotlib (and requests for QuestDB).
 
 ```bash
-git clone https://github.com/quantiota/SKA-ECG-Heart-Rate-Variability.git
-cd SKA-ECG-Heart-Rate-Variability/bitalino-stream
-pip install -r requirements.txt
-
-# test without hardware
-python ska_stream.py --simulate --seconds 5 --dry-run
-
-# live ECG from the board (USB) into QuestDB
-python ska_stream.py --port /dev/ttyUSB0
+python scripts/plot_record.py 0060 25          # → figures/ska_0060_scale25.png, bands3d_0060_scale25.png
+python scripts/plot_record.py 0060 selected    # the scale selected for that woman
+python scripts/build_cube.py 0060 25           # → vr/ska_ecg_0060_scale25_vr.html, open in a browser
 ```
 
-See [`bitalino-stream/README.md`](bitalino-stream/README.md) for setup, safety notes and the table layout.
+To work in SQL, load the two tables into a QuestDB instance:
 
-
-
-## Why the raw waveform
-
-Classical HRV reduces the ECG to beat-to-beat (RR) intervals. Here the learner reads the **raw
-waveform at 1000 Hz**: the sample index is a constant 1 ms clock, every beat is read in full
-(P wave, QRS complex, T wave), and the rhythm appears in the spacing between beats rather than
-being extracted beforehand.
-
-
-
-## Why SKA for HRV?
-
-- **Unsupervised regime change detection** in HRV
-- **Quantifies entropy** even during stable heart rate segments
-- **Registers subtle physiological transitions** that classical HRV analysis does not
-
-## Hypothesis
-
-Physiological signals may carry health-related structure that is registered only through their interaction with an entropy learner, as entropy-regime sequences.
-
-Healthy and pathological conditions may then correspond not only to changes in classical HRV
-metrics, but also to differences in entropy-regime grammar, transition diversity, and sequence
-organization.
-
-## Following Wheeler
-
-> *"No elementary phenomenon is a phenomenon until it is a registered (observed) phenomenon."*
-> — John Archibald Wheeler
-
-The probability bands are not properties of the ECG waiting to be found: they are
-**registered by the interaction** between the ordered stream of heart waves and the SKA
-real-time learner. The evidence is in the results themselves — the bands are not in the
-input values, and their order is not the input order; they are not in a histogram, which
-discards the order of the waves; they form only after the learning phase, as the learner's
-uncertainty falls; and they live in the learner's own space (z, ż, P).
-
-This is why the project speaks of structure being *registered*, not *hidden* or *discovered*:
-the information is produced by the interaction, as it is for the market and the genome.
-
-*Reference: John Archibald Wheeler, "Information, Physics, Quantum: the Search for Links",
-Proc. 3rd Int. Symp. Foundations of Quantum Mechanics, Tokyo, 1989, pp. 354–368.*
-
-
-## Pathology Sequence Library
-
-Unlike classical supervised machine learning approaches, SKA-HRV does not rely primarily on training large black-box models.
-
-Instead, the framework aims to build a **library of physiological entropy-regime sequences** derived directly from real-time ECG dynamics.
-
-The proposed pipeline is:
-
-```
-raw ECG waveform (1000 Hz)
-        ↓
-five waves per beat → phasors c → return ċ
-        ↓
-SKA entropy learning (one step per wave)
-        ↓
-transitions between waves (5 × 5 = 25 possible)
-        ↓
-5-bit transition words
-        ↓
-binary information flow
-        ↓
-sequence-pattern mapping
+```bash
+docker run -p 9000:9000 -p 8812:8812 questdb/questdb
+python scripts/load_questdb.py                 # all 38 records, or --records 0060 0002
 ```
 
-Each beat has five waves, P → Q → R → S → T, and each wave is one step of the learner
-(see [`complex-events/`](complex-events/)). The states are the five waves, so two
-consecutive waves form one of 5 × 5 = 25 transitions; 25 values need five bits, so each
-transition is written as a 5-bit word, and the stream of words is the binary information
-flow. The beat order P → Q → R → S → T uses only five of them — repeating as a
-fixed cycle. The other twenty are the transitions outside that cycle, such as T→Q, T→R or
-P→P; which of them occur, and what they correspond to, is for cardiologists to establish.
+```sql
+SELECT * FROM ecg_steps WHERE record_id = '0060' ORDER BY sample_index;
+SELECT * FROM ecg_ska_results WHERE record_id = '0060' AND input = 'cdot_cos' AND scale = 25 ORDER BY event_index;
+```
 
-Under this framework, healthy and pathological cardiac states may correspond to distinct binary transition grammars and entropy-regime organizations.
+## `ecg_steps` — the raw ECG
 
-Examples of future mapped conditions may include:
+One row per sample, 900,000 per woman (15 minutes at 1000 Hz). Nothing is filtered or rescaled.
 
-- Healthy autonomic regulation
-- Stress and fatigue states
-- Recovery dynamics
-- Arrhythmia-related instability
-- Autonomic dysfunction
-- Sleep-related physiological transitions
+| column | meaning |
+|---|---|
+| `record_id`, `age_band` | PhysioNet record, e.g. `0060`, and its age band, e.g. `18-19` |
+| `channel` | `ECG1` |
+| `step_index` | emission order within a stream: across the 30 records, then from 0 again for the 8 women added for the 18–19 group |
+| `sample_index` | position within the record (1 sample = 1 ms) |
+| `adc` | raw 16-bit value |
+| `value` | the sample in mV, (adc − baseline) / gain from the record header |
+| `rate_hz`, `record_length`, `total_steps` | provenance |
+| `timestamp` | assigned on a fixed grid, t_start + k / rate_hz |
 
-The long-term objective is to create an open and extensible SKA Pathology Sequence Library, where physiological conditions are associated with characteristic entropy-transition structures rather than only statistical HRV metrics.
+## `ecg_ska_results` — the SKA output
 
-In this sense, SKA-HRV investigates whether cardiac physiology can be interpreted as a measurable informational language emerging from real-time entropy dynamics.
+For each wave n of the heartbeat (P, Q, R, S, T) the learner reads one number,
+x_n = σ(s · Re ċ_n), where ċ_n = c_n − c_{n−1} is the change of the wave's phasor and s is the
+scale (per mV). One step is one transition, from a wave to the next: five steps per beat; a run
+is 3,500 steps = 700 beats.
+Each woman has one run per scale tried, the selected one and the others; the selected scale
+is in `selected_scales.csv`. The 8 women added for the 18–19 group have one run so far, at
+scale 25. Record 0060 also has the sine and cosine + sine inputs.
 
+| column | meaning |
+|---|---|
+| `record_id`, `input`, `scale` | the run (`cdot_cos` = Re ċ, `cdot_sin` = Im ċ, `cdot_cossin` = their sum) |
+| `event`, `transition` | the wave (P, Q, R, S, T) and the transition into it |
+| `event_index`, `k`, `peak` | step n = 5k + j, beat k, sample index of the wave's peak |
+| `value_cos`, `value_sin` | Re c_n, Im c_n (mV); 0 when the wave is absent |
+| `value_return` | u_n: Re ċ_n, Im ċ_n or their sum (mV) |
+| `x_input` | x_n, what the learner reads |
+| `rr` | the beat's duration (ms) |
+| `knowledge` | z = ‖Z‖ |
+| `decision`, `decision_norm` | the learner's last decision D and ‖D‖ |
+| `entropy` | H |
+| `delta_t` | time since the previous wave (s) |
+| `cosine_similarity`, `delta_h_over_delta_d`, `frobenius_norm`, `matrix_size` | learner diagnostics |
+| `timestamp` | the wave’s time, on the same grid as ecg_steps |
 
-## Related SKA repositories
+The scripts add two quantities (`scripts/ska_data.py`):
 
-The same SKA real-time learner, applied to other streams:
+| | definition |
+|---|---|
+| **P** | the transition probability, P = exp(−\|ΔH / H\|), from the entropy of two successive steps |
+| **ż** | ż = dz/dt per second, central difference `np.gradient(z) / delta_t` |
 
-- [SKA-Genomics](https://github.com/quantiota/SKA-Genomics) — the E. coli K-12 MG1655 chromosome streamed in replication order: 16 transition bands, 64 trinucleotide sub-bands and the genome's path in the 3D probability space.
-- [SKA-quantitative-finance](https://github.com/quantiota/SKA-quantitative-finance) — tick-by-tick market data: probability bands, the 4-bit binary transition space and the sequence library.
+(z, ż, P) is the learner's 3D space: the axes of the figures and the cubes, coloured by the
+five transitions P→Q, Q→R, R→S, S→T, T→P (stored as P-Q, … in the transition column).
 
+## Joining with the ECG
 
-
-## Collaboration & Citation
-
-### 👥 **Collaboration Call: HRV + Machine Learning Researchers**
-
-We seek collaboration with **established HRV researchers who have published in HRV analysis and machine learning** to explore SKA's entropy-based regime registration in physiological time series.
-
-#### What We Bring:
-- **Novel SKA entropy framework:** Proven in market regime detection and genomic sequences, now applied to HRV
-- **Entropy learning on the raw ECG stream**, read in order, one sample at a time
-- **Registration of regime cycling and subtle state transitions not seen by classical reading**
-- **Open-source acquisition stream**
-
-#### Ideal Collaborator:
-- **Published HRV researchers** with clinical/medical datasets
-- **Machine learning expertise** in time series or physiological signal processing
-- **Interest in information-theoretic approaches** to biosignals
-- **Willing to co-author research papers/validation studies**
-
-#### Example Collaboration Areas:
-- Clinical validation on cardiac datasets (ICU, ambulatory, sleep, etc.)
-- Comparison of SKA vs. traditional HRV metrics (RMSSD, pNN50, SDNN, etc.)
-- Applications in real-time monitoring: sports, critical care, neurocardiology
-- Methodology papers: Information theory meets physiology
-
-
-#### Citation
-
-If you use or extend this project, please cite:  
-
-* Bouarfa Mahi.
-  Structured Knowledge Accumulation: An Autonomous Framework for Layer-Wise Entropy Reduction in Neural Learning
-  [arXiv:2503.13942](https://arxiv.org/abs/2503.13942)
-* Bouarfa Mahi.
-  Structured Knowledge Accumulation: The Principle of Entropic Least Action in Forward-Only Neural Learning
-  [arXiv:2504.03214](https://arxiv.org/abs/2504.03214)
-
-
-**Contact:** Bouarfa Mahi — _especially interested in collaboration with those having access to large HRV datasets or clinical validation environments._
-
-
+`peak` in `ecg_ska_results` is a `sample_index` of `ecg_steps` for the same `record_id`, so each
+step of the learner points to the peak, in the raw ECG, of the wave its transition leads into,
+and `k` groups the five transitions of one beat.
 
 ## License
 
-MIT
-
-
-
-*SKA-HRV bridges the gap between modern information theory and physiological data science*
+Scripts: MIT, as this repository. ECG data: from PhysioNet, under the license of the Autonomic
+Aging database; cite the database when you use it.
