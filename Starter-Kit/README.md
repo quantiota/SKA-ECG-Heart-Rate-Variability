@@ -13,7 +13,7 @@ the kit holds its output, not its code.
 ## Contents
 
 ```
-SKA-ECG-Starter-Kit/
+Starter-Kit/
 ├── README.md
 ├── data/
 │   ├── ecg_steps/<record>.csv.gz   raw ECG, one row per sample, one file per woman
