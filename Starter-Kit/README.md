@@ -40,7 +40,7 @@ The scripts read the CSV files directly; QuestDB is optional.
 
 ```python
 import pandas as pd
-ecg = pd.read_csv("data/ecg_steps/0060.csv.gz")
+ecg = pd.read_csv("data/ecg_steps/0060.csv.gz", dtype={"record_id": str})
 ska = pd.read_csv("data/ecg_ska_results.csv.gz", dtype={"record_id": str})
 ```
 
@@ -105,7 +105,7 @@ is in `selected_scales.csv`. Record 0060 also has the sine and cosine + sine inp
 | `entropy` | H |
 | `delta_t` | time since the previous wave (s) |
 | `cosine_similarity`, `delta_h_over_delta_d`, `frobenius_norm`, `matrix_size` | learner diagnostics |
-| `timestamp` | the wave's time in the recording |
+| `timestamp` | the wave’s time, on the same grid as ecg_steps |
 
 The scripts add two quantities (`scripts/ska_data.py`):
 
@@ -115,7 +115,7 @@ The scripts add two quantities (`scripts/ska_data.py`):
 | **ż** | ż = dz/dt per second, central difference `np.gradient(z) / delta_t` |
 
 (z, ż, P) is the learner's 3D space: the axes of the figures and the cubes, coloured by the
-five transitions P→Q, Q→R, R→S, S→T, T→P.
+five transitions P→Q, Q→R, R→S, S→T, T→P (stored as P-Q, … in the transition column).
 
 ## Joining with the ECG
 
