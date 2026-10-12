@@ -1,10 +1,16 @@
 # SKA-ECG starter kit
 
-**The data and the SKA results of thirty women aged 18 to 92, ready to load and plot.**
+**The data and the SKA results of 38 women, ready to load and plot.**
 
-The ECG comes from 30 records of the PhysioNet
+The ECG comes from 38 records of the PhysioNet
 [Autonomic Aging database](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/)
-(lead ECG1, 1000 Hz, the first 15 minutes, 2 women per age band). The SKA results are the
+(women, lead ECG1, 1000 Hz, the first 15 minutes), in two sets:
+
+- **30 women aged 18 to 92**, 2 per age band;
+- **a group of 10 women aged 18–19**: 0060 and 0465 from the 30, and 0886, 1088, 0697, 0044,
+  0098, 0239, 0262, 0290.
+
+The SKA results are the
 output of the SKA real-time learner reading the five waves of each heartbeat. The method is
 described in this repository: [`complex-events/`](../complex-events/) for the input, and
 [`ska-ecg-engine/`](../ska-ecg-engine/) for the results. The learner itself is not included:
@@ -25,10 +31,10 @@ Starter-Kit/
 │   ├── build_cube.py               3D cube (HTML) for one record and one scale
 │   ├── ska_data.py                 shared loader (computes P and ż)
 │   └── ska_ecg_vr_template.html    the cube template
-└── vr/                             30 cubes, one per woman, at her selected scale
+└── vr/                             38 cubes, one per woman, at her selected scale
 ```
 
-`vr/` holds the cubes of the 30 women at the scale selected for each. The other scales tried
+`vr/` holds the cubes of the 38 women at the scale selected for each (two tables in `vr/README.md`). The other scales tried
 are in the data: build their cubes with `scripts/build_cube.py <record> <scale>`, e.g.
 `python scripts/build_cube.py 0002 25`.
 
@@ -60,7 +66,7 @@ To work in SQL, load the two tables into a QuestDB instance:
 
 ```bash
 docker run -p 9000:9000 -p 8812:8812 questdb/questdb
-python scripts/load_questdb.py                 # all 30 records, or --records 0060 0002
+python scripts/load_questdb.py                 # all 38 records, or --records 0060 0002
 ```
 
 ```sql
@@ -76,7 +82,7 @@ One row per sample, 900,000 per woman (15 minutes at 1000 Hz). Nothing is filter
 |---|---|
 | `record_id`, `age_band` | PhysioNet record, e.g. `0060`, and its age band, e.g. `18-19` |
 | `channel` | `ECG1` |
-| `step_index` | emission order across the 30 records |
+| `step_index` | emission order within a stream: across the 30 records, then from 0 again for the 8 women added for the 18–19 group |
 | `sample_index` | position within the record (1 sample = 1 ms) |
 | `adc` | raw 16-bit value |
 | `value` | the sample in mV, (adc − baseline) / gain from the record header |
@@ -87,9 +93,11 @@ One row per sample, 900,000 per woman (15 minutes at 1000 Hz). Nothing is filter
 
 For each wave n of the heartbeat (P, Q, R, S, T) the learner reads one number,
 x_n = σ(s · Re ċ_n), where ċ_n = c_n − c_{n−1} is the change of the wave's phasor and s is the
-scale (per mV). One step is one wave, five steps per beat; a run is 3,500 steps = 700 beats.
+scale (per mV). One step is one transition, from a wave to the next: five steps per beat; a run
+is 3,500 steps = 700 beats.
 Each woman has one run per scale tried, the selected one and the others; the selected scale
-is in `selected_scales.csv`. Record 0060 also has the sine and cosine + sine inputs.
+is in `selected_scales.csv`. The 8 women added for the 18–19 group have one run so far, at
+scale 25. Record 0060 also has the sine and cosine + sine inputs.
 
 | column | meaning |
 |---|---|
@@ -120,8 +128,8 @@ five transitions P→Q, Q→R, R→S, S→T, T→P (stored as P-Q, … in the tr
 ## Joining with the ECG
 
 `peak` in `ecg_ska_results` is a `sample_index` of `ecg_steps` for the same `record_id`, so each
-step of the learner points to the sample of its wave in the raw ECG, and `k` groups the five
-waves of one beat.
+step of the learner points to the peak, in the raw ECG, of the wave its transition leads into,
+and `k` groups the five transitions of one beat.
 
 ## License
 
