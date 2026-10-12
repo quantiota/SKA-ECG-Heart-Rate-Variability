@@ -25,8 +25,12 @@ Starter-Kit/
 │   ├── build_cube.py               3D cube (HTML) for one record and one scale
 │   ├── ska_data.py                 shared loader (computes P and ż)
 │   └── ska_ecg_vr_template.html    the cube template
-└── vr/                             one cube per woman, at her selected scale
+└── vr/                             30 cubes, one per woman, at her selected scale
 ```
+
+`vr/` holds the cubes of the 30 women at the scale selected for each. The other scales tried
+are in the data: build their cubes with `scripts/build_cube.py <record> <scale>`, e.g.
+`python scripts/build_cube.py 0002 25`.
 
 The scripts read the CSV files directly; QuestDB is optional.
 
