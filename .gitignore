@@ -1,5 +1,5 @@
-# Public ECG datasets — downloaded locally, never committed (PhysioNet, tens of MB to GB)
-data/
+
+
 
 # SKA real-time engine work — proprietary, never committed
 ecg-ska-engine/
