@@ -121,13 +121,14 @@ one value per event, 5 per beat.
 
 *Figure 6 — Cosine and sine of ċ along the event index, coloured by transition.*
 
-### A missing event
+## A missing event
 
-**First prototype (this folder).** Every beat sends its five events to the learner. A wave
+**First prototype (the results here).** Every beat sends its five events to the learner. A wave
 that is not found in a beat (`present` = False) is still sent, with c = 0. If S is missing,
 the learner reads ċ = 0 − c_R for "R→S" and ċ = c_T − 0 for "S→T": the two transitions keep
-their names, but each one now joins a wave and nothing. In the learner's space their steps
-form their own band, apart from the normal R→S and S→T. On a healthy heart, where the
+their names, but each one now joins a wave and nothing. Their transition probability P shifts:
+lower for R→S, higher for S→T. The steps move within the band, not into a band of their own.
+On a healthy heart, where the
 waves are almost always present, the first prototype reads the beat as it is.
 
 **Second prototype (next step).** A missing wave is removed from the stream. If S is
@@ -143,6 +144,7 @@ new band in the learner's space.
 | missing wave | sent, c = 0 | removed from the stream |
 | beat with S missing | P→Q, Q→R, R→S, S→T, T→P | P→Q, Q→R, **R→T**, T→P |
 | for | healthy hearts | pathological hearts |
+
 
 ## 5. The two streams side by side
 
