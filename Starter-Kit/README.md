@@ -30,11 +30,15 @@ Starter-Kit/
 │   ├── plot_record.py              2D and 3D figures for one record and one scale
 │   ├── build_cube.py               3D cube (HTML) for one record and one scale
 │   ├── ska_data.py                 shared loader (computes P and ż)
-│   └── ska_ecg_vr_template.html    the cube template
-└── vr/                             38 cubes, one per woman, at her selected scale
+│   ├── ska_ecg_vr_template.html    the cube template
+│   ├── ska_ecg_vr_template_tagged.html   the same, missing waves tagged (×)
+│   └── ska_ecg_vr_template_dt.html       the same, vertical axis Δt
+└── vr/                             3 cubes per woman, at her selected scale
 ```
 
-`vr/` holds the cubes of the 38 women at the scale selected for each (two tables in `vr/README.md`). The other scales tried
+`vr/` holds three cubes for each of the 38 women, at the scale selected for each (two tables in
+`vr/README.md`): the cube (P), the same with the steps into or out of a missing wave tagged (×),
+and the cube with Δt, the time since the previous wave, as the vertical axis. The other scales tried
 are in the data: build their cubes with `scripts/build_cube.py <record> <scale>`, e.g.
 `python scripts/build_cube.py 0002 25`.
 
@@ -60,6 +64,8 @@ Python 3 with numpy, pandas, matplotlib (and requests for QuestDB).
 python scripts/plot_record.py 0060 25          # → figures/ska_0060_scale25.png, bands3d_0060_scale25.png
 python scripts/plot_record.py 0060 selected    # the scale selected for that woman
 python scripts/build_cube.py 0060 25           # → vr/ska_ecg_0060_scale25_vr.html, open in a browser
+python scripts/build_cube.py 0060 25 tagged    # → vr/ska_ecg_0060_scale25_tagged_vr.html
+python scripts/build_cube.py 0060 25 dt        # → vr/ska_ecg_0060_scale25_dt_vr.html
 ```
 
 To work in SQL, load the two tables into a QuestDB instance:
@@ -107,7 +113,7 @@ scale 25. Record 0060 also has the sine and cosine + sine inputs.
 | `value_cos`, `value_sin` | Re c_n, Im c_n (mV); 0 when the wave is absent |
 | `value_return` | u_n: Re ċ_n, Im ċ_n or their sum (mV) |
 | `x_input` | x_n, what the learner reads |
-| `rr` | the beat's duration (ms) |
+| `rr` | time from the beat's P peak to the next beat's P peak (ms) |
 | `knowledge` | z = ‖Z‖ |
 | `decision`, `decision_norm` | the learner's last decision D and ‖D‖ |
 | `entropy` | H |

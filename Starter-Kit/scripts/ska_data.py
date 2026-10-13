@@ -32,5 +32,7 @@ def load_run(rec, scale_arg, inp="cdot_cos"):
     d["P"] = P
     d["zdot"] = np.gradient(d.knowledge.to_numpy(float)) / d.delta_t.to_numpy(float)
     d["tr"] = d.transition.str.replace("-", "→")
+    missing = (d.value_cos == 0) & (d.value_sin == 0)                  # the wave of this step is missing
+    d["m"] = (missing | missing.shift(fill_value=False)).astype(int)   # step into it, or out of it
     d = d.dropna(subset=["P", "zdot"]).reset_index(drop=True)
     return d, scale, sel.loc[rec, "age_band"].replace("-", "–")
