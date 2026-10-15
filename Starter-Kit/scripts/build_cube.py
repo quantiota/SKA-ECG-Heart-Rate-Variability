@@ -9,10 +9,12 @@ Usage
     python scripts/build_cube.py 0060 selected
     python scripts/build_cube.py 0060 25 tagged       # → vr/ska_ecg_0060_scale25_tagged_vr.html
     python scripts/build_cube.py 0060 25 dt           # → vr/ska_ecg_0060_scale25_dt_vr.html
+    python scripts/build_cube.py 0060 25 label        # → vr/ska_ecg_0060_scale25_label_vr.html
 
 tagged: a step that goes into or out of a missing wave (value_cos = value_sin = 0) is drawn as
 a cross, in its transition colour. dt: the vertical axis is Δt, the time since the previous
-wave (ms), instead of P.
+wave (ms), instead of P. label: the tagged cube, click a point to read it (transition, beat, step,
+time, x, P, z, ż, Δt).
 Requires: numpy, pandas
 """
 import json
@@ -28,14 +30,18 @@ OUT = HERE.parent / "vr"
 def main():
     rec, scale_arg = sys.argv[1].zfill(4), sys.argv[2]
     kind = sys.argv[3] if len(sys.argv) > 3 else ""
-    if kind not in ("", "tagged", "dt"):
-        raise SystemExit("third argument: tagged or dt")
+    if kind not in ("", "tagged", "dt", "label"):
+        raise SystemExit("third argument: tagged, dt or label")
     d, scale, age = load_run(rec, scale_arg)
     D = dict(z=d.knowledge.round(2).tolist(), zd=d.zdot.round(3).tolist(), p=d.P.round(4).tolist(),
              t=[NAMES.index(t) for t in d.tr], names=NAMES, colors=COLORS,
              zmax=float(d.knowledge.max()), zdmax=float(d.zdot.max()))
-    if kind == "tagged":
+    if kind in ("tagged", "label"):
         D["m"] = d.m.tolist()
+    if kind == "label":
+        D.update(k=d.k.astype(int).tolist(), n=d.event_index.astype(int).tolist(),
+                 tm=(d.peak / 1000).round(3).tolist(), x=d.x_input.round(4).tolist(),
+                 dt=(1000 * d.delta_t).round(1).tolist())
     if kind == "dt":
         D["p"] = (1000 * d.delta_t).round(1).tolist()
         D["ymax"] = float(1000 * d.delta_t.max())

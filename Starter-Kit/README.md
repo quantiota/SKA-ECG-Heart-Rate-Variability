@@ -34,6 +34,7 @@ Starter-Kit/
 │   ├── add_replay.py               adds a real-time replay (play / pause / speed) to a cube
 │   ├── ska_ecg_vr_template.html    the cube template
 │   ├── ska_ecg_vr_template_tagged.html   the same, missing waves tagged (×)
+│   ├── ska_ecg_vr_template_label.html    the tagged cube, click a point to read it
 │   └── ska_ecg_vr_template_dt.html       the same, vertical axis Δt
 └── vr/                             3 cubes per woman, at her selected scale
 ```
@@ -68,6 +69,7 @@ python scripts/plot_record.py 0060 selected    # the scale selected for that wom
 python scripts/build_cube.py 0060 25           # → vr/ska_ecg_0060_scale25_vr.html, open in a browser
 python scripts/build_cube.py 0060 25 tagged    # → vr/ska_ecg_0060_scale25_tagged_vr.html
 python scripts/build_cube.py 0060 25 dt        # → vr/ska_ecg_0060_scale25_dt_vr.html
+python scripts/build_cube.py 0060 25 label     # → vr/ska_ecg_0060_scale25_label_vr.html, click a point to read it
 python scripts/make_timing.py vr/ska_ecg_0060_scale25_vr.html data/ecg_ska_results.csv.gz 0060 25 timing.json
 python scripts/add_replay.py vr/ska_ecg_0060_scale25_vr.html timing.json vr/ska_ecg_0060_scale25_vr_replay.html
 ```
