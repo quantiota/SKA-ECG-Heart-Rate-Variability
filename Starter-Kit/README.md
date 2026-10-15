@@ -30,6 +30,8 @@ Starter-Kit/
 │   ├── plot_record.py              2D and 3D figures for one record and one scale
 │   ├── build_cube.py               3D cube (HTML) for one record and one scale
 │   ├── ska_data.py                 shared loader (computes P and ż)
+│   ├── make_timing.py              the time (Δt) and beat of every point of a cube
+│   ├── add_replay.py               adds a real-time replay (play / pause / speed) to a cube
 │   ├── ska_ecg_vr_template.html    the cube template
 │   ├── ska_ecg_vr_template_tagged.html   the same, missing waves tagged (×)
 │   └── ska_ecg_vr_template_dt.html       the same, vertical axis Δt
@@ -66,6 +68,8 @@ python scripts/plot_record.py 0060 selected    # the scale selected for that wom
 python scripts/build_cube.py 0060 25           # → vr/ska_ecg_0060_scale25_vr.html, open in a browser
 python scripts/build_cube.py 0060 25 tagged    # → vr/ska_ecg_0060_scale25_tagged_vr.html
 python scripts/build_cube.py 0060 25 dt        # → vr/ska_ecg_0060_scale25_dt_vr.html
+python scripts/make_timing.py vr/ska_ecg_0060_scale25_vr.html data/ecg_ska_results.csv.gz 0060 25 timing.json
+python scripts/add_replay.py vr/ska_ecg_0060_scale25_vr.html timing.json vr/ska_ecg_0060_scale25_vr_replay.html
 ```
 
 To work in SQL, load the two tables into a QuestDB instance:
