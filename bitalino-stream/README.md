@@ -75,15 +75,6 @@ python ska_stream.py --port XX:XX:XX:XX:XX:XX --channel 1 --host localhost --ilp
 
 Stop with Ctrl-C, or add `--seconds 300` for a 5-minute recording.
 
-**5. Record without QuestDB** (e.g. on a Raspberry Pi during an activity), load it later
-
-```bash
-python ska_stream.py --port XX:XX:XX:XX:XX:XX --channel 1 --dry-run > run.ilp
-nc localhost 9009 < run.ilp        # later, on the computer running QuestDB
-```
-
-The rows keep their original timestamps and `run` tag.
-
 Options: `--channel` (0 = A1), `--seconds` (0 = until Ctrl-C), `--block` (samples per read),
 `--run` (tag for this acquisition), `--host`, `--ilp-port`, `--table`, `--dry-run`, `--simulate`.
 
