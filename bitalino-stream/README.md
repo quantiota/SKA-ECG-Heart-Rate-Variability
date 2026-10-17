@@ -8,32 +8,79 @@ beat detection and no learning happen here.
 
 ## Requirements
 
-- BITalino (r)evolution Board Kit, connected by **USB** (preferred — Bluetooth can drop packets)
+- BITalino (r)evolution Board Kit, connected by **Bluetooth** (the device has no USB data link)
 - Python ≥ 3.8
 - QuestDB with ILP enabled on port 9009
 - `pip install -r requirements.txt` (`bitalino`, `numpy`)
+- Linux: the Bluetooth headers, needed to build `bitalino`: `sudo apt install libbluetooth-dev`
 
-Serial port: Linux `/dev/ttyUSB0`, macOS `/dev/tty.*`, Windows `COM3` (check Device Manager).
+The device is addressed by its Bluetooth MAC address (Linux, macOS) or its Bluetooth serial port (Windows, e.g. `COM3`).
+
+## Electrodes
+
+Three electrodes, lead II, matched by **sleeve colour**:
+
+| sleeve | role | position |
+|---|---|---|
+| black | − | under the right collarbone |
+| red | + | lower left ribcage |
+| white | reference | under the left collarbone |
+
+On the Board Kit the ECG sensor is wired to channel **A2**, so the stream reads `--channel 1`
+(0 = A1, 1 = A2, …).
 
 ## Safety
 
-BITalino is a research kit, **not a medical device**. When the electrodes are on the body,
-run the computer **on battery, unplugged from the mains**. Nothing in this repository is
+BITalino is a research kit, **not a medical device**. It runs on its own battery and sends
+its data by Bluetooth, so it has no wired link to the computer. **Never wear the electrodes
+while the BITalino is charging.** Nothing in this repository is
 intended for diagnosis.
 
 ## Quick start
 
+**1. Install** (Linux)
+
 ```bash
+sudo apt install libbluetooth-dev python3-venv
 git clone https://github.com/quantiota/SKA-ECG-Heart-Rate-Variability.git
 cd SKA-ECG-Heart-Rate-Variability/bitalino-stream
+python3 -m venv ~/bitalino-venv
+source ~/bitalino-venv/bin/activate
 pip install -r requirements.txt
-
-# test without hardware: synthetic ECG, rows printed to the console
-python ska_stream.py --simulate --seconds 5 --dry-run
-
-# live: ECG on channel A1 → QuestDB table ecg_stream
-python ska_stream.py --port /dev/ttyUSB0
 ```
+
+**2. Test without hardware** — synthetic ECG, rows printed to the console
+
+```bash
+python ska_stream.py --simulate --seconds 5 --dry-run
+```
+
+**3. Pair the BITalino** — switch it on, then pair with PIN `1234` and note its MAC address
+
+```bash
+bluetoothctl
+  scan on                      # wait for BITalino-XX-XX and its MAC address
+  pair XX:XX:XX:XX:XX:XX       # PIN 1234
+  trust XX:XX:XX:XX:XX:XX
+  quit
+```
+
+**4. Live stream** — ECG on A2 → QuestDB table `ecg_stream`, QuestDB on the same computer
+
+```bash
+python ska_stream.py --port XX:XX:XX:XX:XX:XX --channel 1 --host localhost --ilp-port 9009
+```
+
+Stop with Ctrl-C, or add `--seconds 300` for a 5-minute recording.
+
+**5. Record without QuestDB** (e.g. on a Raspberry Pi during an activity), load it later
+
+```bash
+python ska_stream.py --port XX:XX:XX:XX:XX:XX --channel 1 --dry-run > run.ilp
+nc localhost 9009 < run.ilp        # later, on the computer running QuestDB
+```
+
+The rows keep their original timestamps and `run` tag.
 
 Options: `--channel` (0 = A1), `--seconds` (0 = until Ctrl-C), `--block` (samples per read),
 `--run` (tag for this acquisition), `--host`, `--ilp-port`, `--table`, `--dry-run`, `--simulate`.
@@ -59,8 +106,7 @@ The clock survives dropped packets. Samples lost in transmission are detected fr
 sequence number and skipped in `sample_index`, so the samples after a loss keep their true
 position and RR intervals are not shortened. Losses of up to 15 consecutive samples are
 counted exactly (15 shows up as a repeated sequence number); the 4-bit sequence number cannot
-tell larger losses apart, so they are counted modulo 16 — another reason to prefer USB over
-Bluetooth.
+tell larger losses apart, so they are counted modulo 16.
 
 The simulator (`--simulate`) produces a synthetic ECG with real beat-to-beat variability —
 respiratory sinus arrhythmia plus random beat-to-beat variability, SDNN ≈ 30 ms over 5 minutes — so an HRV pipeline can be tested end to end without the board.
@@ -71,14 +117,14 @@ respiratory sinus arrhythmia plus random beat-to-beat variability, SDNN ≈ 30 m
 |---|---|
 | Sampling rate | 1000 Hz |
 | ADC resolution | 10-bit |
-| Channel | A1 (ECG) |
+| Channel | A2 (ECG, Board Kit) — `--channel 1` |
 | Data | raw value per sample, no processing |
 | Ingestion | QuestDB ILP, TCP 9009 |
 
 ## Data flow
 
 ```text
-BITalino (USB, 1000 Hz)
+BITalino (Bluetooth, 1000 Hz)
      ↓
 ska_stream.py  — raw ADC → level in [0, 1], one row per sample
      ↓
