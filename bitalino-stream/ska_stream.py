@@ -20,13 +20,15 @@ counted exactly (15 shows up as a repeated sequence number). The 4-bit sequence 
 cannot tell larger losses apart: they are counted modulo 16.
 
 Usage
-    python ska_stream.py --port /dev/ttyUSB0                 # Linux, USB
-    python ska_stream.py --port COM3                         # Windows, USB
-    python ska_stream.py --simulate --seconds 60             # synthetic ECG, no device
-    python ska_stream.py --port /dev/ttyUSB0 --dry-run       # print rows, no QuestDB
+    python ska_stream.py --port XX:XX:XX:XX:XX:XX --channel 1      # Linux/macOS, Bluetooth MAC, ECG on A2
+    python ska_stream.py --port COM3 --channel 1                   # Windows, Bluetooth serial port
+    python ska_stream.py --simulate --seconds 60                   # synthetic ECG, no device
+    python ska_stream.py --port XX:XX:XX:XX:XX:XX --channel 1 --dry-run   # print rows, no QuestDB
 
-Safety: BITalino is a research kit, not a medical device. When electrodes are on the body,
-run the computer on battery (unplugged from mains).
+The BITalino has no USB data link: it streams by Bluetooth only.
+
+Safety: BITalino is a research kit, not a medical device. Never wear the electrodes while
+the BITalino is charging.
 """
 import argparse
 import socket
@@ -99,7 +101,7 @@ class SyntheticECG:
 def main():
     ap = argparse.ArgumentParser(description="BITalino ECG → QuestDB stream for SKA-HRV")
     src = ap.add_mutually_exclusive_group(required=True)
-    src.add_argument("--port", help="serial port (/dev/ttyUSB0, COM3) or MAC address")
+    src.add_argument("--port", help="Bluetooth MAC address (Linux, macOS) or Bluetooth serial port (Windows, COM3)")
     src.add_argument("--simulate", action="store_true", help="synthetic ECG, no device")
     ap.add_argument("--channel", type=int, default=0, help="analog channel index (0 = A1)")
     ap.add_argument("--seconds", type=float, default=0, help="stop after N seconds (0 = run until Ctrl-C)")
