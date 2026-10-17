@@ -20,7 +20,7 @@ The device is addressed by its Bluetooth MAC address (Linux, macOS) or its Bluet
 
 Three electrodes, lead II, matched by **sleeve colour**:
 
-![Electrode placement, lead II](docs/electrode_placement.png)
+![BITalino ECG electrode placement, lead II](docs/bitalino_lead2.png)
 
 | sleeve | role | position |
 |---|---|---|
@@ -139,4 +139,4 @@ Grafana (live visualization)
 
 ## Documentation
 
-Manufacturer documents in [`docs/`](docs/): quick-start guide, user manual and board-kit datasheet. `docs/electrode_placement.png` is the electrode figure above.
+Manufacturer documents in [`docs/`](docs/): quick-start guide, user manual and board-kit datasheet. `docs/bitalino_lead2.png` is the electrode figure above.
