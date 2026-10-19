@@ -103,13 +103,12 @@ It opens in a browser, or in a headset (WebXR).
 ## Entropic characteristic time of the heart τ_H
 
 The characteristic time of SKA learning, T = η × K ([arXiv:2504.03214](https://arxiv.org/abs/2504.03214), §2.2),
-is the time the learner needs to complete its learning. On the ECG stream the time step changes from wave to
-wave: the learner updates with η Δt_k, η = 10⁻⁷ and Δt_k the real time between waves k−1 and k. The total time
-is the integral up to step K, the wave where the entropy is 90 % saturated (|H| back to 10 % of its minimum;
-the slowest of the five transitions):
+is the time the learner needs to complete its learning. On the ECG stream the time step is Δt_k, the real time
+between waves k−1 and k, so it changes from wave to wave. The total time is the integral up to step K, the wave
+where the entropy is 90 % saturated (|H| back to 10 % of its minimum; the slowest of the five transitions):
 
 $$
-\tau_H = \sum_{k=1}^{K} \eta\, \Delta t_k = \int_0^{t_K} \eta\, dt
+\tau_H = \sum_{k=1}^{K} \Delta t_k = \int_0^{t_K} dt
 $$
 
 A parameter of the heart that classical ECG cannot produce. One value per woman, at her selected scale:

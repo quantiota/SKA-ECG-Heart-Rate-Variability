@@ -2,10 +2,10 @@
 Entropic characteristic time of the heart: the total learning time (arXiv:2504.03214, §2.2, T = η × K)
 until the entropy is 90 % saturated.
 
-The learner's time step varies with the wave: ska_core.py updates W with −Δt_k × η × gradient, η = 1e-7,
-Δt_k the real time between waves k−1 and k (s). The total time is therefore the sum of the steps:
+The learner's time step is Δt_k, the real time between waves k−1 and k (ska_core.py updates W with
+−Δt_k × 1e-7 × gradient). The total time is therefore the sum of the steps:
 
-    tau_H = Σ_{k ≤ K} η Δt_k = ∫_0^{t_K} η dt = η · t_K
+    tau_H = Σ_{k ≤ K} Δt_k = ∫_0^{t_K} dt = t_K       (seconds; also given in minutes)
 
     K    = the step (wave) where the entropy is 90 % saturated: for each transition, the first step after the
            entropy minimum where |H| ≤ 10 % of |H_min|; the heart is saturated when its slowest transition is.
@@ -24,7 +24,6 @@ import sys
 import numpy as np
 import pandas as pd
 
-ETA = 1e-7                                     # ska_core.py update rate (per second of Δt)
 SATURATION = 0.9
 TRANSITIONS = ["P-Q", "Q-R", "R-S", "S-T", "T-P"]
 
@@ -56,13 +55,13 @@ def main():
             i0 = H.argmin()
             hit = np.flatnonzero(np.abs(H[i0:]) <= (1 - SATURATION) * abs(H[i0]))
             K[tr] = g.index[i0 + hit[0]] if len(hit) else None
-            row[f"tau_{tr}"] = ETA * t[K[tr]] if K[tr] is not None else np.nan
+            row[f"tau_{tr}_s"] = t[K[tr]] if K[tr] is not None else np.nan
         slow = max(TRANSITIONS, key=lambda tr: -1 if K[tr] is None else K[tr])
-        row.update(tau_H=row[f"tau_{slow}"], slowest=slow, K=int(K[slow]) + 1, t_K_s=round(float(t[K[slow]]), 1),
+        row.update(tau_H_s=row[f"tau_{slow}_s"], tau_H_min=row[f"tau_{slow}_s"] / 60, slowest=slow, K=int(K[slow]) + 1,
                    waves=len(d))
         rows.append(row)
     o = pd.DataFrame(rows)
-    o.to_csv(out, index=False, float_format="%.4g")
+    o.to_csv(out, index=False, float_format="%.1f")
     print(o.to_string(index=False))
     print(f"-> {out}")
 
