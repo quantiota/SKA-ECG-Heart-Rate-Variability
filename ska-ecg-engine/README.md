@@ -100,6 +100,17 @@ It opens in a browser, or in a headset (WebXR).
 | 85–92 | 0188 | 30 | [`ska_ecg_0188_scale30_vr.html`](vr/ska_ecg_0188_scale30_vr.html) |
 | 85–92 | 0912 | 35 | [`ska_ecg_0912_scale35_vr.html`](vr/ska_ecg_0912_scale35_vr.html) |
 
+## Entropic characteristic time of the heart τ_H
+
+The characteristic time of SKA learning, T = η × K ([arXiv:2504.03214](https://arxiv.org/abs/2504.03214), §2.2),
+is the time the learner needs to complete its learning. For the heart, η = 0.001 (1 ms) and K is the number of
+waves until the entropy is 90 % saturated (|H| back to 10 % of its minimum; the slowest of the five transitions):
+
+τ_H = η × K
+
+A parameter of the heart that classical ECG cannot produce. One value per woman, at her selected scale:
+[`results/tau_H.csv`](results/tau_H.csv), computed by [`tau_h.py`](tau_h.py).
+
 ## Limits
 
 - **Thirty women**, healthy, one lead, 700 beats each. Nothing here is a result about hearts
@@ -120,7 +131,9 @@ It opens in a browser, or in a headset (WebXR).
 ```
 build_ecg_vr.py              fills the cube template with one run (record, scale)
 ska_ecg_vr_template.html     the cube (Three.js), placeholders __DATA__ and __DESCRIPTION__
+tau_h.py                     τ_H of each woman, from the run CSVs
 results/
+├── tau_H.csv                τ_H and τ of each transition, one row per woman
 └── <record>/                one folder per woman (30)
     ├── ska_<record>_runs.csv    every run of the record, one row per step
     └── figures/
@@ -135,6 +148,12 @@ To rebuild a cube:
 
 ```bash
 python build_ecg_vr.py ska_ecg_vr_template.html results/0912/ska_0912_runs.csv 35 "85–92" vr/ska_ecg_0912_scale35_vr.html
+```
+
+To recompute τ_H:
+
+```bash
+python tau_h.py results results/tau_H.csv
 ```
 
 ## Data — `results/<record>/ska_<record>_runs.csv`
