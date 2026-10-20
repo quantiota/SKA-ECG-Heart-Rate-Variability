@@ -147,12 +147,16 @@ The long-term objective is to create an open and extensible SKA Pathology Sequen
 In this sense, SKA-HRV investigates whether cardiac physiology can be interpreted as a measurable informational language emerging from real-time entropy dynamics.
 
 
-## Related SKA repositories
+## SKA ECG repositories
 
-The same SKA real-time learner, applied to other streams:
+The same SKA real-time learner, applied to the ECG:
 
-- [SKA-Genomics](https://github.com/quantiota/SKA-Genomics) — the E. coli K-12 MG1655 chromosome streamed in replication order: 16 transition bands, 64 trinucleotide sub-bands and the genome's path in the 3D probability space.
-- [SKA-quantitative-finance](https://github.com/quantiota/SKA-quantitative-finance) — tick-by-tick market data: probability bands, the 4-bit binary transition space and the sequence library.
+- [SKA-ECG-Heart-Rate-Variability](https://github.com/quantiota/SKA-ECG-Heart-Rate-Variability) — this repository: 38 healthy women of the PhysioNet Autonomic Aging dataset, the first-order cube (z, ż, P), the entropic characteristic time τ_H and the BITalino stream.
+- [SKA-ECG-Pathology](https://github.com/quantiota/SKA-ECG-Pathology) — PhysioNet PTB, 28 healthy controls and 76 myocardial-infarction recordings: missing waves and infarction cubes.
+- [SKA-ECG-Second-Order](https://github.com/quantiota/SKA-ECG-Second-Order) — the learner reads its own first-order result, one step per cycle: the cycle that repeats, and P₂.
+- [SKA-ECG-Third-Order](https://github.com/quantiota/SKA-ECG-Third-Order) — the learner reads the second-order result, one step per cycle.
+- [SKA-ECG-Arrhythmia](https://github.com/quantiota/SKA-ECG-Arrhythmia) — PhysioNet MIT-BIH, 46 arrhythmic records, with the cardiologists' beat labels on the cubes.
+- [SKA-ECG-Arrhythmia-Second-Order](https://github.com/quantiota/SKA-ECG-Arrhythmia-Second-Order) — the second order on MIT-BIH: Δt₂ bands registered by the learner that follow the MIT-BIH annotations.
 
 
 
