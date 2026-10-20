@@ -114,6 +114,13 @@ $$
 A parameter of the heart that classical ECG cannot produce. One value per woman, at her selected scale:
 [`results/tau_H.csv`](results/tau_H.csv), computed by [`tau_h.py`](tau_h.py).
 
+The cycles to saturation, N_H, remove the heart rate from τ_H: τ_H divided by T_c, the mean cycle time
+of the run (its total time divided by its number of cycles). N_H has no unit:
+
+$$
+N_H = \frac{\tau_H}{T_c}
+$$
+
 ## Limits
 
 - **Thirty women**, healthy, one lead, 700 beats each. Nothing here is a result about hearts
@@ -134,9 +141,9 @@ A parameter of the heart that classical ECG cannot produce. One value per woman,
 ```
 build_ecg_vr.py              fills the cube template with one run (record, scale)
 ska_ecg_vr_template.html     the cube (Three.js), placeholders __DATA__ and __DESCRIPTION__
-tau_h.py                     τ_H of each woman, from the run CSVs
+tau_h.py                     τ_H and N_H of each woman, from the run CSVs
 results/
-├── tau_H.csv                τ_H and τ of each transition, one row per woman
+├── tau_H.csv                τ_H, τ of each transition, T_c and N_H, one row per woman
 └── <record>/                one folder per woman (30)
     ├── ska_<record>_runs.csv    every run of the record, one row per step
     └── figures/

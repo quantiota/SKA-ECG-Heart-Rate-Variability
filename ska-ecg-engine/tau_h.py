@@ -10,6 +10,9 @@ The learner's time step is Δt_k, the real time between waves k−1 and k (ska_c
     K    = the step (wave) where the entropy is 90 % saturated: for each transition, the first step after the
            entropy minimum where |H| ≤ 10 % of |H_min|; the heart is saturated when its slowest transition is.
 
+    N_H  = tau_H / T_c, the number of cycles to saturation (no unit, independent of the heart rate),
+           with T_c the mean cycle time of the run: its total time divided by its number of cycles.
+
 Each record is read at its selected scale (the figure results/<record>/figures/ska_<record>_cdot_cos_scale<S>_selected.png;
 no scale in the name = scale 5), or at scale 25 when no scale was selected. Input cdot_cos.
 
@@ -43,11 +46,12 @@ def main():
         sel = selected_scale(folder)
         scale = sel if sel is not None else 25.0
         d = pd.read_csv(folder / f"ska_{rec}_runs.csv",
-                        usecols=["input", "scale", "transition", "event_index", "entropy", "delta_t"])
+                        usecols=["input", "scale", "transition", "event_index", "k", "entropy", "delta_t"])
         d = d[(d.input == "cdot_cos") & (d.scale == scale)].sort_values("event_index").reset_index(drop=True)
         if d.empty:
             raise SystemExit(f"{rec}: no rows for input=cdot_cos scale={scale:g}")
         t = d.delta_t.fillna(0).cumsum()                       # ∫ dt: real time since the first wave (s)
+        Tc = t.iloc[-1] / d.k.nunique()                        # mean cycle time of the run (s)
         row = dict(record=rec, selected="yes" if sel is not None else "no", scale=scale)
         K = {}
         for tr, g in d.dropna(subset=["entropy"]).groupby("transition"):
@@ -58,7 +62,7 @@ def main():
             row[f"tau_{tr}_s"] = t[K[tr]] if K[tr] is not None else np.nan
         slow = max(TRANSITIONS, key=lambda tr: -1 if K[tr] is None else K[tr])
         row.update(tau_H_s=row[f"tau_{slow}_s"], tau_H_min=row[f"tau_{slow}_s"] / 60, slowest=slow, K=int(K[slow]) + 1,
-                   waves=len(d))
+                   waves=len(d), T_c_ms=1000 * Tc, N_H=row[f"tau_{slow}_s"] / Tc)
         rows.append(row)
     o = pd.DataFrame(rows)
     o.to_csv(out, index=False, float_format="%.1f")
