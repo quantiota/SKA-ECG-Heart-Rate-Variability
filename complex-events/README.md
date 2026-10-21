@@ -196,9 +196,10 @@ assumption it is the opposite of McSharry's (in bold):
 | derivative | — | ċ on the event index, read as cosine and sine streams |
 | use | testing algorithms | input to the SKA learner |
 
-The real heart sits between the two assumptions: the QRS lasts about the same at any heart
-rate (fixed time, as here), while the T wave moves partly with RR (QT scales roughly with
-√RR, Bazett's relation). The difference has a visible consequence: because the angle between R and S shrinks
+The real heart follows neither assumption exactly: the QRS duration depends on heart rate, but
+not in the same direction for everyone — at high heart rates it lengthened in about 35 % of
+523 healthy subjects and shortened in the others (Hnatkova et al. 2016) — while the T wave
+moves partly with RR (QT scales roughly with √RR, Bazett's relation, Bazett 1920). The difference has a visible consequence: because the angle between R and S shrinks
 when RR is long, the two cancel more, which is the mechanism expected behind a |C|–RR relation
 (section 7). With McSharry's fixed angles it would not occur through this mechanism.
 
@@ -219,9 +220,10 @@ fixed. The code's default angles for P and T (−70°, +100°) also differ from 
 - **Phase-rectified signal averaging** (Bauer et al. 2006), the method behind deceleration
   capacity. It also aligns beats by phase, but on the RR series rather than on the waveform.
 - **Hilbert-transform phase of the ECG**, which gives every sample an angle, continuously,
-  without a circle per beat.
+  without a circle per beat — Nunes & Naït-Ali (2005).
 - **Vectorcardiography**, which draws the heart's activity as a loop — built from several
-  leads placed around the body, not from one lead mapped onto a circle in time.
+  leads placed around the body, not from one lead mapped onto a circle in time — Frank (1956);
+  review: Vondrak & Penhaker (2022).
 
 A first search found no work that folds position, amplitude and arc into one complex number
 per event on a circle of radius RR/2π, or that feeds its derivative to a real-time learner.
@@ -236,6 +238,11 @@ Sources:
 - [Fourier-series arrhythmia classification, CinC 2020](https://www.cinc.org/2020/Program/accepted/431.html)
 - Sayadi, Shamsollahi & Clifford (2010), *Robust detection of premature ventricular contractions using a wave-based Bayesian framework*, IEEE Trans. Biomed. Eng. 57(2) — [PDF](https://lcp.mit.edu/pdf/sayadiTBME2009.pdf)
 - Bauer, Kantelhardt et al. (2006), *Phase-rectified signal averaging detects quasi-periodicities in non-stationary data*, Physica A 364:423–434 — [record](https://ideas.repec.org/a/eee/phsmap/v364y2006icp423-434.html)
+- Hnatkova K, Smetana P, Toman O, Schmidt G, Malik M (2016), *Sex and race differences in QRS duration*, Europace 18(12):1842–1849, doi:10.1093/europace/euw065 — [record](https://portal.fis.tum.de/en/publications/sex-and-race-differences-in-qrs-duration/)
+- Bazett HC (1920), *An analysis of the time-relations of electrocardiograms*, Heart 7:353–370 — [note](https://litfl.com/henry-cuthbert-bazett/)
+- Nunes JC, Naït-Ali A (2005), *Hilbert transform-based ECG modeling*, Biomedical Engineering 39:133–137, doi:10.1007/s10527-005-0065-4 — [PDF](https://www.academia.edu/14068671/Hilbert_Transform_Based_ECG_Modeling)
+- Frank E (1956), *An accurate, clinically practical system for spatial vectorcardiography*, Circulation 13(5):737–749, doi:10.1161/01.CIR.13.5.737
+- Vondrak J, Penhaker M (2022), *Review of processing pathological vectorcardiographic records for the detection of heart disease*, Front. Physiol. 13:856590 — [article](https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2022.856590/full)
 
 ## Reproduce
 

@@ -28,7 +28,7 @@ Early stage. The work runs in two steps:
 1. **Public data first.** The [Autonomic Aging](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/)
    database on PhysioNet — resting ECG at 1000 Hz from 1,121 healthy subjects aged 18 to 92 —
    will be replayed as a stream into QuestDB and learned. Heart rate variability is known to
-   decline with age, which gives the first readout a reference to be checked against.
+   decline with age ([Umetani et al. 1998](https://pubmed.ncbi.nlm.nih.gov/9502641/)), which gives the first readout a reference to be checked against.
 2. **Then the device.** [`bitalino-stream/`](bitalino-stream/) reads the raw ECG waveform from
    a BITalino board at the same 1000 Hz and writes it, sample by sample, into the same table,
    so moving from step 1 to step 2 changes only the source.

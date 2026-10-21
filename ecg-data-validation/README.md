@@ -43,7 +43,7 @@ destroyed by accident).
 
 [Autonomic Aging](https://physionet.org/content/autonomic-aging-cardiovascular/1.0.0/)
 (PhysioNet): resting ECG from 1,121 healthy volunteers aged 18 to 92, sampled at 1000 Hz.
-Ages are given in 15 bands. Heart rate variability is known to decline with age, so the
+Ages are given in 15 bands. Heart rate variability is known to decline with age ([Umetani et al. 1998](https://pubmed.ncbi.nlm.nih.gov/9502641/)), so the
 dataset carries its own reference.
 
 `records.txt` lists the 30 records streamed. Every factor except age is held fixed:
