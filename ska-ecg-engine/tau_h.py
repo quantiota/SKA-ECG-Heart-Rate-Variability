@@ -2,8 +2,8 @@
 Entropic characteristic time of the heart: the total learning time (arXiv:2504.03214, §2.2, T = η × K)
 until the entropy is 90 % saturated.
 
-The learner's time step is Δt_k, the real time between waves k−1 and k (ska_core.py updates W with
-−Δt_k × 1e-7 × gradient). The total time is therefore the sum of the steps:
+The learner's time step is Δt_k, the real time between waves k−1 and k. The total time is
+therefore the sum of the steps:
 
     tau_H = Σ_{k ≤ K} Δt_k = ∫_0^{t_K} dt = t_K       (seconds; also given in minutes)
 
