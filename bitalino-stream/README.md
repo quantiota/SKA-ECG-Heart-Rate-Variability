@@ -146,8 +146,4 @@ Open a cube and press **Enter VR** in the headset browser.
 
 *The entropy H and the Lagrangian L of each step, coloured by transition.*
 
-The entropy of a step is the integral of the Lagrangian over that step:
 
-H_k = L_k · Δt_k / ln 2,  with  L_k = −Σᵢ ½ Δ(Zᵢ²) · Dᵢ(1 − Dᵢ) / Δt_k
-
-so the five transitions, separated in H, are reordered in L by their own Δt.
