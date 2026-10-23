@@ -145,5 +145,3 @@ Open a cube and press **Enter VR** in the headset browser.
 ![entropy H and Lagrangian L](testing/entropy_lagrangian_20261023T172530_scale25.png)
 
 *The entropy H and the Lagrangian L of each step, coloured by transition.*
-
-
