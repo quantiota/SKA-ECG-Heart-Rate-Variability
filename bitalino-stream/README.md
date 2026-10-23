@@ -131,3 +131,23 @@ Grafana (live visualization)
 ## Documentation
 
 Manufacturer documents in [`docs/`](docs/): quick-start guide, user manual and board-kit datasheet. `docs/bitalino_lead2.png` is the electrode figure above.
+
+## Testing
+
+One run recorded with this stream and learned by the SKA real-time learner: 12 minutes,
+lead II, 1000 Hz, the standard 700 cycles (3,500 waves), input Re ċ, scale 25.
+Open a cube and press **Enter VR** in the headset browser.
+
+| run | scale | cycles | cube (P) | Δt | entropy H | Lagrangian L |
+|---|---|---|---|---|---|---|
+| 20261023T172530 | 25 | 700 | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/bitalino-stream/testing/ska_ecg_bitalino_20261023T172530_scale25_vr.html) | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/bitalino-stream/testing/ska_ecg_bitalino_20261023T172530_scale25_dt_vr.html) | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/bitalino-stream/testing/ska_ecg_bitalino_20261023T172530_scale25_entropy_vr.html) | [open](https://quantiota.github.io/SKA-ECG-Heart-Rate-Variability/bitalino-stream/testing/ska_ecg_bitalino_20261023T172530_scale25_lagrangian_vr.html) |
+
+![entropy H and Lagrangian L](testing/entropy_lagrangian_20261023T172530_scale25.png)
+
+*The entropy H and the Lagrangian L of each step, coloured by transition.*
+
+The entropy of a step is the integral of the Lagrangian over that step:
+
+H_k = L_k · Δt_k / ln 2,  with  L_k = −Σᵢ ½ Δ(Zᵢ²) · Dᵢ(1 − Dᵢ) / Δt_k
+
+so the five transitions, separated in H, are reordered in L by their own Δt.
