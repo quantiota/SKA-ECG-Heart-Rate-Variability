@@ -145,3 +145,43 @@ Open a cube and press **Enter VR** in the headset browser.
 ![entropy H and Lagrangian L](testing/entropy_lagrangian_20261023T172530_scale25.png)
 
 *The entropy H and the Lagrangian L of each step, coloured by transition.*
+
+### The run in Grafana
+
+The signal and the waves detected by the learner, as two QuestDB tables:
+
+| table | file | rows |
+|---|---|---|
+| `ecg_stream` (the signal) | [ecg_stream_20261023T172530.csv.zip](testing/ecg_stream_20261023T172530.csv.zip) | 720,000 |
+| `ecg_waves` (the detected waves) | [ecg_waves_20261023T172530.csv](testing/ecg_waves_20261023T172530.csv) | 3,500 |
+
+`ecg_waves` has one row per wave: `timestamp`, `run`, `wave` (P, Q, R, S, T), `sample_index`, `level`.
+Import each file in the QuestDB console (port 9000), with `timestamp` as the designated timestamp,
+then add the two queries to one Grafana time-series panel.
+
+Query A, the signal:
+
+```sql
+SELECT timestamp, level AS ECG
+FROM ecg_stream
+WHERE run = '20261023T172530'
+ORDER BY timestamp;
+```
+
+Query B, the detected waves (style: points):
+
+```sql
+SELECT timestamp,
+  CASE WHEN wave = 'P' THEN level END AS P,
+  CASE WHEN wave = 'Q' THEN level END AS Q,
+  CASE WHEN wave = 'R' THEN level END AS R,
+  CASE WHEN wave = 'S' THEN level END AS S,
+  CASE WHEN wave = 'T' THEN level END AS T
+FROM ecg_waves
+WHERE run = '20261023T172530'
+ORDER BY timestamp;
+```
+
+![the signal and the detected waves in Grafana](testing/grafana_ecg_20261023T172530.png)
+
+*Six seconds of the run in Grafana: the signal (line) and the detected waves P, Q, R, S, T (points).*
