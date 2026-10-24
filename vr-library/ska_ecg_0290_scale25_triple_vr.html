@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Cubes VR</title>
+<style>
+  :root { --bg:#121317; --line:#2c2d33; }
+  html,body { margin:0; height:100%; background:var(--bg); overflow:hidden; }
+  #row { display:flex; height:100%; }
+  iframe { flex:1; min-width:0; height:100%; border:0; border-right:1px solid var(--line); }
+  iframe:last-child { border-right:0; }
+  @media (max-width:900px){ #row { flex-direction:column; } iframe { border-right:0; border-bottom:1px solid var(--line); } }
+</style>
+</head>
+<body>
+<div id="row">
+<iframe allow="xr-spatial-tracking; fullscreen" src="ska_ecg_0290_scale25_vr.html"></iframe>
+<iframe allow="xr-spatial-tracking; fullscreen" src="ska_ecg_0290_scale25_dt_vr.html"></iframe>
+<iframe allow="xr-spatial-tracking; fullscreen" src="ska_ecg_0290_scale25_entropy_vr.html"></iframe>
+</div>
+</body>
+</html>
