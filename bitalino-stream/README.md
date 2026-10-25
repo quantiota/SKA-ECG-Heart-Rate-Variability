@@ -10,7 +10,8 @@ beat detection and no learning happen here.
 
 - BITalino (r)evolution Board Kit, connected by **Bluetooth** (the device has no USB data link)
 - Python ≥ 3.8
-- QuestDB with ILP enabled on port 9009
+- QuestDB with ILP enabled on port 9009, and Grafana. The test below used the
+  [AI Agent Host](https://github.com/quantiota/AI-Agent-Host) (QuestDB, Grafana, Code-Server, Nginx in one Docker stack)
 - `pip install -r requirements.txt` (`bitalino`, `numpy`)
 - Linux: the Bluetooth headers, needed to build `bitalino`: `sudo apt install libbluetooth-dev`
 
@@ -148,7 +149,8 @@ Open a cube and press **Enter VR** in the headset browser.
 
 ### The run in Grafana
 
-The signal and the waves detected by the learner, as two QuestDB tables:
+The signal and the waves detected by the learner, as two QuestDB tables, in the QuestDB and
+Grafana of the [AI Agent Host](https://github.com/quantiota/AI-Agent-Host):
 
 | table | file | rows |
 |---|---|---|
