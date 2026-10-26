@@ -160,7 +160,7 @@ The same SKA real-time learner, applied to the ECG:
 - [SKA-ECG-Athletes](https://github.com/quantiota/SKA-ECG-Athletes) — Sport DB 2.0, the resting ECG of 23 healthy athletes (American football, running, cycling), 250 Hz.
 - [SKA-ECG-Fantasia](https://github.com/quantiota/SKA-ECG-Fantasia) — PhysioNet Fantasia, 39 healthy young and elderly subjects at supine rest, 250 Hz.
 - [SKA-ECG-SDDB](https://github.com/quantiota/SKA-ECG-SDDB) — PhysioNet Sudden Cardiac Death Holter, 250 Hz: the hours before and after a ventricular fibrillation, learned in successive 700-cycle loops (record 52, 60 loops).
-
+- [SKA-ECG-Detection-Validation](https://github.com/quantiota/SKA-ECG-Detection-Validation) — the P, Q, R, S, T detection of `complex-events/` checked against the waves marked by cardiologists in PhysioNet LUDB (200 records, lead II).
 
 
 ## Collaboration & Citation
