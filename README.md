@@ -3,6 +3,16 @@
  [![arXiv](https://img.shields.io/badge/arXiv-2503.13942-b31b1b)](https://arxiv.org/abs/2503.13942)   [![arXiv](https://img.shields.io/badge/arXiv-2504.03214-b31b1b)](https://arxiv.org/abs/2504.03214)   [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-SKA-orange)](https://huggingface.co/quant-iota) [![Sponsor](https://img.shields.io/badge/Sponsor-quantiota-ea4aaa?logo=github-sponsors)](https://github.com/sponsors/quantiota)
 
 
+
+<p align="center">
+  <a href="https://www.amazon.com/dp/B0HQJR3PY7"><img src="https://raw.githubusercontent.com/quantiota/Kindle-SKA-Labs/main/assets/ska-series-banner.jpg" alt="Foundations of Structured Knowledge Accumulation — the textbook series" width="100%"></a>
+</p>
+
+<p align="center"><b>Foundations of Structured Knowledge Accumulation</b> — Parts I–III on Kindle, Part IV on pre-order · <a href="https://www.amazon.com/dp/B0HQJR3PY7">See the series on Amazon</a></p>
+
+
+
+
 **Heart Rate Variability (HRV) Exploration with Structured Knowledge Accumulation (SKA) and Entropy-Based Learning**
 
 This project applies the SKA entropy learning framework to the raw ECG waveform, streamed in real time, and to the heart rate variability (HRV) it carries — aiming to register informational regimes and subtle physiological patterns not accessible with classical statistics or supervised machine learning.
