@@ -124,7 +124,7 @@ scale 25. Record 0060 also has the sine and cosine + sine inputs.
 | `decision`, `decision_norm` | the learner's last decision D and ‖D‖ |
 | `entropy` | H |
 | `delta_t` | time since the previous wave (s) |
-| `cosine_similarity`, `delta_h_over_delta_d`, `frobenius_norm`, `matrix_size` | learner diagnostics |
+| `cosine_similarity`, `delta_h_over_delta_d`, `frobenius_norm` | learner diagnostics |
 | `timestamp` | the wave’s time, on the same grid as ecg_steps |
 
 The scripts add two quantities (`scripts/ska_data.py`):

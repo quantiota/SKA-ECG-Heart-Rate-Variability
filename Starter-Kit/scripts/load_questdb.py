@@ -35,7 +35,7 @@ SCHEMA = {
         {"name": "record_id", "type": "SYMBOL"}, {"name": "input", "type": "SYMBOL"},
         {"name": "event", "type": "SYMBOL"}, {"name": "transition", "type": "SYMBOL"},
         {"name": "event_index", "type": "LONG"}, {"name": "k", "type": "LONG"},
-        {"name": "peak", "type": "LONG"}, {"name": "matrix_size", "type": "LONG"},
+        {"name": "peak", "type": "LONG"},
         {"name": "timestamp", "type": "TIMESTAMP", "pattern": "yyyy-MM-dd HH:mm:ss.SSSUUU"},
     ],
 }
